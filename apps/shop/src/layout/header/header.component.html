@@ -1,0 +1,22 @@
+<header class="header">
+  <button appearance="secondary" size="m" tuiButton type="button" (click)="navigateHome()">
+    <tui-icon icon="@tui.shield" />
+    GetEVENT
+  </button>
+
+  <div class="header__user">
+    <button
+      appearance="primary"
+      iconStart="@tui.user"
+      size="l"
+      tuiBadge
+      (click)="navigateToUserProfile()"
+    >
+      <div class="ellipsis">{{ userMe()?.userName ?? userMe()?.email }}</div>
+    </button>
+    <button appearance="outline" size="s" tuiButton type="button" (click)="logout()">
+      <tui-icon icon="@tui.log-out" />
+      Exit
+    </button>
+  </div>
+</header>

@@ -60,7 +60,6 @@ nx show project my-app --json | jq '.targets'
 nx show project my-app --json | jq '.targets.build'
 nx show project my-app --json | jq '.targets | keys'
 
-
 # Check project metadata
 nx show project my-app --json | jq '{name, root, sourceRoot, projectType, tags}'
 ```
@@ -182,26 +181,17 @@ Example output:
 
 ```json
 {
-  "root": "apps/my-app",
+  "implicitDependencies": [],
   "name": "my-app",
-  "sourceRoot": "apps/my-app/src",
   "projectType": "application",
+  "root": "apps/my-app",
+  "sourceRoot": "apps/my-app/src",
   "tags": ["type:app", "scope:client"],
   "targets": {
-    "build": {
-      "executor": "@nx/vite:build",
-      "options": { "outputPath": "dist/apps/my-app" }
-    },
-    "serve": {
-      "executor": "@nx/vite:dev-server",
-      "options": { "buildTarget": "my-app:build" }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "options": {}
-    }
-  },
-  "implicitDependencies": []
+    "build": { "executor": "@nx/vite:build", "options": { "outputPath": "dist/apps/my-app" } },
+    "serve": { "executor": "@nx/vite:dev-server", "options": { "buildTarget": "my-app:build" } },
+    "test": { "executor": "@nx/vite:test", "options": {} }
+  }
 }
 ```
 
@@ -233,21 +223,10 @@ Example output:
 {
   "graph": {
     "nodes": {
-      "my-app": {
-        "name": "my-app",
-        "type": "app",
-        "data": { "root": "apps/my-app", "tags": ["type:app"] }
-      },
-      "shared-ui": {
-        "name": "shared-ui",
-        "type": "lib",
-        "data": { "root": "packages/shared-ui", "tags": ["type:ui"] }
-      }
+      "my-app": { "name": "my-app", "type": "app", "data": { "root": "apps/my-app", "tags": ["type:app"] } },
+      "shared-ui": { "name": "shared-ui", "type": "lib", "data": { "root": "packages/shared-ui", "tags": ["type:ui"] } }
     },
-    "dependencies": {
-      "my-app": [{ "source": "my-app", "target": "shared-ui", "type": "static" }],
-      "shared-ui": []
-    }
+    "dependencies": { "my-app": [{ "source": "my-app", "target": "shared-ui", "type": "static" }], "shared-ui": [] }
   }
 }
 ```
@@ -281,5 +260,5 @@ nx show projects --withTarget target
 
 ```bash
 nx sync
-nx reset  # if sync doesn't fix stale cache
+nx reset # if sync doesn't fix stale cache
 ```

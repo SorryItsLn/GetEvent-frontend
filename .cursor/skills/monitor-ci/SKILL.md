@@ -274,13 +274,13 @@ This means the expected CI Attempt was never created - CI likely failed before N
    - Run install to update lockfile:
 
      ```bash
-     pnpm install   # or npm install / yarn install
+     pnpm install # or npm install / yarn install
      ```
 
    - If lockfile changed:
 
      ```bash
-     git add pnpm-lock.yaml  # or appropriate lockfile
+     git add pnpm-lock.yaml # or appropriate lockfile
      git commit -m "chore: update lockfile"
      git push origin $(git branch --show-current)
      ```

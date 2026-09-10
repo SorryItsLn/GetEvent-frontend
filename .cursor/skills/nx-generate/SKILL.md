@@ -97,7 +97,7 @@ After reading the source, reconsider: Is this the right generator? If not, go ba
 > # ✅ Correct - directory is the full path for the library
 > nx g @nx/react:library --directory=packages/my-lib
 > # generates packages/my-lib/package.json and more
->
+> 
 > # ❌ Wrong - this will create files at libs and packages/src/...
 > nx g @nx/react:library --name=my-lib --directory=libs
 > # generates packages/package.json and more

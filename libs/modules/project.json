@@ -1,0 +1,9 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "modules",
+  "prefix": "lib",
+  "projectType": "library",
+  "sourceRoot": "libs/modules/src",
+  "tags": ["scope:modules", "type:modules"],
+  "targets": { "lint": { "executor": "@nx/eslint:lint" } }
+}

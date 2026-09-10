@@ -11,12 +11,7 @@ ESLint-specific guidance for `nx import`. For generic import issues (root deps, 
 **Plugin options (set during `nx add @nx/eslint`):**
 
 ```json
-{
-  "plugin": "@nx/eslint/plugin",
-  "options": {
-    "targetName": "eslint:lint"
-  }
-}
+{ "options": { "targetName": "eslint:lint" }, "plugin": "@nx/eslint/plugin" }
 ```
 
 **Auto-installation**: `nx import` auto-detects ESLint config files and offers to install `@nx/eslint`. Accept the offer — it registers the plugin and updates `namedInputs.production` to exclude ESLint config files.
@@ -47,9 +42,7 @@ This causes `Parsing error: ESLint was configured to run on X using parserOption
 
 ```json
 // .eslintrc.json
-{
-  "ignorePatterns": ["dist/**"]
-}
+{ "ignorePatterns": ["dist/**"] }
 ```
 
 ```js
@@ -70,9 +63,7 @@ When a project uses `eslint.config.cjs` (CJS flat config), `eslint .` lints the 
 
 ```js
 module.exports = tseslint.config(
-  {
-    ignores: ['dist/**', 'node_modules/**', 'eslint.config.cjs'],
-  },
+  { ignores: ['dist/**', 'node_modules/**', 'eslint.config.cjs'] },
   // ...
 );
 ```
@@ -91,11 +82,7 @@ The same applies to `eslint.config.js` in a CJS project (no `"type": "module"`) 
 
 ```json
 // packages/my-package/package.json
-{
-  "devDependencies": {
-    "typescript-eslint": "^8.0.0"
-  }
-}
+{ "devDependencies": { "typescript-eslint": "^8.0.0" } }
 ```
 
 **Note**: npm's root-level `"overrides"` field does not force versions for workspace packages' direct dependencies — update each package.json individually.

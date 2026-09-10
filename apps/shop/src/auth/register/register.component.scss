@@ -1,0 +1,13 @@
+.register {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 300px;
+    gap: 10px;
+  }
+
+  &__button {
+    width: 100%;
+  }
+}

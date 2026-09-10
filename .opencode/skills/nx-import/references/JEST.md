@@ -11,12 +11,7 @@ Jest-specific guidance for `nx import`. For the basic "Jest Preset Missing" fix 
 **Plugin options:**
 
 ```json
-{
-  "plugin": "@nx/jest/plugin",
-  "options": {
-    "targetName": "test"
-  }
-}
+{ "options": { "targetName": "test" }, "plugin": "@nx/jest/plugin" }
 ```
 
 `npx nx add @nx/jest` does two things:
@@ -100,12 +95,8 @@ Jest projects need a `tsconfig.spec.json` that includes test files:
 
 ```json
 {
+  "compilerOptions": { "outDir": "../../dist/out-tsc", "module": "commonjs", "types": ["jest", "node"] },
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
-    "types": ["jest", "node"]
-  },
   "include": ["jest.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
 }
 ```
@@ -130,10 +121,7 @@ Both `@nx/jest/plugin` and `@nx/vite/plugin` (which infers Vitest targets) coexi
 **Target naming**: Both default to `test`. If a project somehow has both config files, rename one:
 
 ```json
-{
-  "plugin": "@nx/jest/plugin",
-  "options": { "targetName": "jest-test" }
-}
+{ "options": { "targetName": "jest-test" }, "plugin": "@nx/jest/plugin" }
 ```
 
 ---
@@ -174,13 +162,7 @@ Nx rewrites `package.json` scripts during init. Test scripts get broken:
 `@nx/jest/plugin` supports splitting tests per-file for CI parallelism:
 
 ```json
-{
-  "plugin": "@nx/jest/plugin",
-  "options": {
-    "targetName": "test",
-    "ciTargetName": "test-ci"
-  }
-}
+{ "options": { "targetName": "test", "ciTargetName": "test-ci" }, "plugin": "@nx/jest/plugin" }
 ```
 
 This creates `test-ci--src/lib/foo.spec.ts` targets for each test file, enabling Nx Cloud distribution. Not relevant during import, but useful for post-import CI setup.

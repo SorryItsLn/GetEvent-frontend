@@ -1,0 +1,13 @@
+<form appearance="floating" class="login__form" tuiCardLarge tuiForm="m" [formRoot]="registerForm">
+  <tui-textfield>
+    <input placeholder="Email" tuiInput type="email" [formField]="registerForm.email" />
+  </tui-textfield>
+
+  <tui-textfield>
+    <input placeholder="password" tuiInput type="password" [formField]="registerForm.password" />
+  </tui-textfield>
+
+  <button class="login__button" tuiButton type="submit">Sign In</button>
+
+  <a tuiLink [routerLink]="registerLinkRoute">Зарегистрироваться</a>
+</form>

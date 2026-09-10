@@ -4,6 +4,7 @@
 
 ✨ A repository showcasing key [Nx](https://nx.dev) features for Angular monorepos ✨
 🚀 If you haven't connected to Nx Cloud yet, [complete your setup here](https://cloud.nx.app/get-started). Get faster builds with remote caching, distributed task execution, and self-healing CI. [See how your workspace can benefit](#nx-cloud).
+
 ## 📦 Project Overview
 
 This repository demonstrates a production-ready Angular monorepo with:
@@ -192,29 +193,29 @@ This repository uses tags to enforce module boundaries:
 
 ```bash
 # Project exploration
-npx nx graph                                    # Interactive dependency graph
-npx nx list                                     # List installed plugins
-npx nx show project shop --web                 # View project details
+npx nx graph                   # Interactive dependency graph
+npx nx list                    # List installed plugins
+npx nx show project shop --web # View project details
 
 # Development
-npx nx run shop:serve                              # Serve Angular app
-npx nx run api:serve                               # Serve backend API
-npx nx run shop:build                              # Build Angular app
-npx nx run data:test                               # Test a specific library
-npx nx run feature-products:lint                   # Lint a specific library
+npx nx run shop:serve            # Serve Angular app
+npx nx run api:serve             # Serve backend API
+npx nx run shop:build            # Build Angular app
+npx nx run data:test             # Test a specific library
+npx nx run feature-products:lint # Lint a specific library
 
 # Running multiple tasks
-npx nx run-many -t build                       # Build all projects
-npx nx run-many -t test --parallel=3          # Test in parallel
-npx nx run-many -t lint test build            # Run multiple targets
+npx nx run-many -t build             # Build all projects
+npx nx run-many -t test --parallel=3 # Test in parallel
+npx nx run-many -t lint test build   # Run multiple targets
 
 # Affected commands (great for CI)
-npx nx affected -t build                       # Build only affected projects
-npx nx affected -t test                        # Test only affected projects
+npx nx affected -t build # Build only affected projects
+npx nx affected -t test  # Test only affected projects
 
 # Docker operations
-npx nx run api:docker:build                        # Build Docker image
-npx nx run api:docker:run                          # Run Docker container
+npx nx run api:docker:build # Build Docker image
+npx nx run api:docker:run   # Run Docker container
 ```
 
 ## 🎯 Adding New Features

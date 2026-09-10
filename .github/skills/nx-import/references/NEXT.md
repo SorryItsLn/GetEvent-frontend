@@ -59,11 +59,7 @@ Imported Next.js configs may have `// eslint-disable-next-line @typescript-eslin
 When `@nx/next:init` runs during a whole-repo import, it rewrites the project's `package.json` scripts to prefixed `nx` calls:
 
 ```json
-{
-  "dev": "nx next:dev",
-  "build": "nx next:build",
-  "start": "nx next:start"
-}
+{ "build": "nx next:build", "dev": "nx next:dev", "start": "nx next:start" }
 ```
 
 This is the standard "npm Script Rewriting" issue from SKILL.md, but triggered by `@nx/next:init` rather than Nx init. **Fix**: Remove all rewritten scripts from `package.json` — `@nx/next/plugin` infers all targets from `next.config.*`.

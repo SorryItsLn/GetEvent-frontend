@@ -1,0 +1,13 @@
+.auth-layout {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+
+  &__header{
+    align-self: flex-start;
+  }
+  &__content{
+    flex-grow: 1;
+  }
+}
