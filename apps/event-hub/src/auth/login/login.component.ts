@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormField, FormRoot, email, form, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService, LoginRequest } from '@myorg/modules';
@@ -19,7 +18,6 @@ import { AUTH_ROUTING_LINKS } from '../consts';
 export class LoginComponent {
   readonly #authService = inject(AuthService);
   readonly #router = inject(Router);
-  readonly #destroyRef = inject(DestroyRef);
 
   readonly #loginModel = signal<LoginRequest>({ email: '', password: '' });
 
@@ -42,11 +40,8 @@ export class LoginComponent {
   );
 
   #login(request: LoginRequest): void {
-    this.#authService
-      .login(request)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => {
-        this.#router.navigateByUrl(`/${HOME_ROUTING_BASE}`);
-      });
+    this.#authService.login(request).subscribe(() => {
+      this.#router.navigateByUrl(`/${HOME_ROUTING_BASE}`);
+    });
   }
 }

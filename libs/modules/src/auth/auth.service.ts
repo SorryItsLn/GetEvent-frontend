@@ -1,7 +1,7 @@
 import { Service, computed, inject, linkedSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiGateway, CookieService } from '@myorg/core';
-import { EMPTY, Observable, fromEvent, take } from 'rxjs';
+import { EMPTY, Observable, fromEvent, take, tap } from 'rxjs';
 
 import { AUTH_COOKIE_KEY } from './consts';
 import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from './types';
@@ -31,13 +31,18 @@ export class AuthService {
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {
-    return this.#apiGateway
-      .post<LoginResponse>(`${this.#baseUrl}/login`, { ...request })
-      .pipe(take(1));
+    return this.#apiGateway.post<LoginResponse>(`${this.#baseUrl}/login`, { ...request }).pipe(
+      take(1),
+      tap((token) => this.#setToken(token)),
+    );
   }
 
   logout(): void {
     this.#cookieService.remove(AUTH_COOKIE_KEY);
-    this.#token.set(null);
+    this.#setToken(null);
+  }
+
+  #setToken(token: string | null): void {
+    this.#token.set(token);
   }
 }
