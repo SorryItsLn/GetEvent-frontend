@@ -18,7 +18,6 @@
     "src/**/*.spec.js",
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx",
-    "src/**/*.d.ts",
-    "../../apps/shop/src/layout/header/header.component.spec.ts"
+    "src/**/*.d.ts"
   ]
 }

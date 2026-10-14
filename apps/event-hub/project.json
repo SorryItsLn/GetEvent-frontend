@@ -1,22 +1,22 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "shop",
+  "name": "event-hub",
   "prefix": "app",
   "projectType": "application",
-  "sourceRoot": "apps/shop/src",
-  "tags": ["type:app", "scope:shop"],
+  "sourceRoot": "apps/event-hub/src",
+  "tags": ["type:app", "scope:event-hub"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/shop",
-        "browser": "apps/shop/src/main.ts",
+        "outputPath": "dist/apps/event-hub",
+        "browser": "apps/event-hub/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/shop/tsconfig.app.json",
+        "tsConfig": "apps/event-hub/tsconfig.app.json",
         "assets": [
-          { "glob": "**/*", "input": "apps/shop/public" },
+          { "glob": "**/*", "input": "apps/event-hub/public" },
           {
             "glob": "**/*",
             "input": "node_modules/@taiga-ui/icons/src",
@@ -26,9 +26,9 @@
         "styles": [
           "node_modules/@taiga-ui/styles/taiga-ui-theme.less",
           "node_modules/@taiga-ui/styles/taiga-ui-fonts.less",
-          "apps/shop/styles/style.scss"
+          "apps/event-hub/styles/style.scss"
         ],
-        "stylePreprocessorOptions": { "includePaths": ["apps/shop/styles/mixins"] }
+        "stylePreprocessorOptions": { "includePaths": ["apps/event-hub/styles/mixins"] }
       },
       "configurations": {
         "production": {
@@ -45,23 +45,23 @@
       "continuous": true,
       "executor": "@angular/build:dev-server",
       "defaultConfiguration": "development",
-      "options": { "proxyConfig": "apps/shop/proxy.conf.mjs" },
+      "options": { "proxyConfig": "apps/event-hub/proxy.conf.mjs" },
       "configurations": {
-        "production": { "buildTarget": "shop:build:production" },
-        "development": { "buildTarget": "shop:build:development" }
+        "production": { "buildTarget": "event-hub:build:production" },
+        "development": { "buildTarget": "event-hub:build:development" }
       }
     },
     "extract-i18n": {
       "executor": "@angular/build:extract-i18n",
-      "options": { "buildTarget": "shop:build" }
+      "options": { "buildTarget": "event-hub:build" }
     },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "shop:build",
+        "buildTarget": "event-hub:build",
         "port": 4200,
-        "staticFilePath": "dist/apps/shop/browser",
+        "staticFilePath": "dist/apps/event-hub/browser",
         "spa": true
       }
     }

@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "bun nx run shop:serve --hmr"
+    "start": "bun nx run event-hub:serve --hmr"
   },
   "dependencies": {
     "@angular-devkit/build-angular": "^22.1.8",

@@ -22,9 +22,5 @@
     "src/test-setup.ts"
   ],
   "extends": "./tsconfig.json",
-  "include": [
-    "src/**/*.ts",
-    "../../apps/shop/src/layout/header/header.component.spec.ts",
-    "../../apps/shop/src/layout/header/header.component.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }
