@@ -1,0 +1,32 @@
+<div class="events">
+  <header class="header">
+    <div class="header__title">
+      <h2>Мероприятия</h2>
+    </div>
+    <div class="header__create">
+      <a size="s" tuiButton [routerLink]="[EVENT_CREATION_ROUTE]">Создать</a>
+    </div>
+  </header>
+  <section class="section">
+    @for (item of getPaginated()?.items; track item.id) {
+      <a class="section__ticket" [routerLink]="[item.id]">
+        <div class="section__ticket-date">
+          <span class="month">{{ item.startDate | date: 'MMM' }}</span>
+          <span class="day">{{ item.startDate | date: 'dd' }}</span>
+        </div>
+        <div class="section__ticket-body">
+          @let eventCategory = eventCategoriesEntityMap()[item.categoryId];
+          <div class="section__ticket-cat">
+            {{ eventCategory.name }}
+          </div>
+          <h4 class="section__ticket-title">{{ item.title }}</h4>
+          <h4 class="section__ticket-meta">{{ item.venueId }}</h4>
+          <div class="section__ticket-foot">
+            <span>Осталось 6 мест</span>
+            <span>Бесплатно</span>
+          </div>
+        </div>
+      </a>
+    }
+  </section>
+</div>

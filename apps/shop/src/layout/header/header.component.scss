@@ -1,19 +1,14 @@
 :host {
+  display: block;
   width: 100%;
-  box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface);
 }
 
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   height: 60px;
   margin: 0px 10px;
-
-  &__user {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
 }

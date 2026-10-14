@@ -1,0 +1,10 @@
+@mixin title_h2 {
+  margin: 0 0 4px;
+  font-weight: 800;
+  font-size: 26px;
+}
+
+@mixin form_label {
+  font-weight: 600;
+  font-size: 13px;
+}

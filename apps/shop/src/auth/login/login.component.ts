@@ -14,14 +14,14 @@ import { ROUTING_LINKS } from '../consts/routing.consts';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
+  #authService = inject(AuthService);
+  #router = inject(Router);
 
-  private readonly registerSignal = signal<Omit<UserRegisterReq, 'userName'>>({ email: '', password: '' });
+  #registerSignal = signal<Omit<UserRegisterReq, 'userName'>>({ email: '', password: '' });
   protected readonly registerLinkRoute = `/${ROUTING_LINKS.SIGN_UP}`;
 
   protected readonly registerForm = form(
-    this.registerSignal,
+    this.#registerSignal,
     (schema) => {
       required(schema.email);
       email(schema.email);
@@ -38,10 +38,8 @@ export class LoginComponent {
   );
 
   login(req: Omit<UserRegisterReq, 'userName'>) {
-    this.authService.login(req).subscribe(() => {
-      console.log('asd');
-
-      this.router.navigateByUrl('/home');
+    this.#authService.login(req).subscribe(() => {
+      this.#router.navigateByUrl('/home');
     });
   }
 }

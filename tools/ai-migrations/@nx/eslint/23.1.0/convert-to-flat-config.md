@@ -103,7 +103,10 @@ module.exports = {
 // AFTER (eslint.config.mjs)
 import baseConfig from '../../eslint.config.mjs';
 
-export default [...baseConfig, { files: ['**/*.ts'], rules: { '@typescript-eslint/no-explicit-any': 'error' } }];
+export default [
+  ...baseConfig,
+  { files: ['**/*.ts'], rules: { '@typescript-eslint/no-explicit-any': 'error' } },
+];
 ```
 
 **Action items**:
@@ -131,7 +134,10 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { FlatCompat } from '@eslint/eslintrc';
 
-const compat = new FlatCompat({ baseDirectory: dirname(fileURLToPath(import.meta.url)), recommendedConfig: js.configs.recommended });
+const compat = new FlatCompat({
+  baseDirectory: dirname(fileURLToPath(import.meta.url)),
+  recommendedConfig: js.configs.recommended,
+});
 
 export default [...compat.extends('plugin:@typescript-eslint/recommended')];
 ```

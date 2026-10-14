@@ -223,10 +223,21 @@ Example output:
 {
   "graph": {
     "nodes": {
-      "my-app": { "name": "my-app", "type": "app", "data": { "root": "apps/my-app", "tags": ["type:app"] } },
-      "shared-ui": { "name": "shared-ui", "type": "lib", "data": { "root": "packages/shared-ui", "tags": ["type:ui"] } }
+      "my-app": {
+        "name": "my-app",
+        "type": "app",
+        "data": { "root": "apps/my-app", "tags": ["type:app"] }
+      },
+      "shared-ui": {
+        "name": "shared-ui",
+        "type": "lib",
+        "data": { "root": "packages/shared-ui", "tags": ["type:ui"] }
+      }
     },
-    "dependencies": { "my-app": [{ "source": "my-app", "target": "shared-ui", "type": "static" }], "shared-ui": [] }
+    "dependencies": {
+      "my-app": [{ "source": "my-app", "target": "shared-ui", "type": "static" }],
+      "shared-ui": []
+    }
   }
 }
 ```

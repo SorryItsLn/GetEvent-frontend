@@ -1,0 +1,33 @@
+[tuiTheme='dark'] {
+  --accent-light: #3a241e;
+  --border: #262a38;
+  --primary-light: #1b2050;
+  --success-light: #13301f;
+  --surface: #171923;
+  --text-faint: #6d7285;
+  --text-muted: #9ba0b4;
+  --text: #f2f3f8;
+  --bg: #0f1117;
+}
+:root {
+  --accent-light: #ffede8;
+  --accent: #ff6b4a;
+  --border: #e5e7f0;
+  --primary-dark: #232d8a;
+  --primary-light: #eef0fc;
+  --primary: #3646c5;
+  --success-light: #e7f7ef;
+  --success: #1f9d67;
+  --surface: #ffffff;
+  --text-faint: #9ca1b0;
+  --text-muted: #6b7280;
+  --text: #14162b;
+  --bg: #f5f6fa;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+
+  --padding-sm: 12px;
+
+  --tui-typography-family-text: 'Inter', -apple-system, sans-serif;
+}

@@ -130,7 +130,10 @@ function isWaitTimedOut() {
 }
 
 function isNewCipe() {
-  return (prevCipeUrl && cipeUrl && cipeUrl !== prevCipeUrl) || (expectedSha && commitSha && commitSha === expectedSha);
+  return (
+    (prevCipeUrl && cipeUrl && cipeUrl !== prevCipeUrl) ||
+    (expectedSha && commitSha && commitSha === expectedSha)
+  );
 }
 
 // ============================================================
@@ -185,7 +188,8 @@ function classify() {
   if (cipeStatus === 'TIMED_OUT') return { action: 'done', code: 'cipe_timed_out' };
 
   // --- CI failed, no tasks ---
-  if (cipeStatus === 'FAILED' && failedTaskIds.length === 0 && selfHealingStatus == null) return { action: 'done', code: 'cipe_no_tasks' };
+  if (cipeStatus === 'FAILED' && failedTaskIds.length === 0 && selfHealingStatus == null)
+    return { action: 'done', code: 'cipe_no_tasks' };
 
   // --- Environment failure ---
   if (failureClassification === 'environment_state') {
@@ -194,13 +198,18 @@ function classify() {
   }
 
   // --- Throttled ---
-  if (selfHealingSkippedReason === 'THROTTLED') return { action: 'done', code: 'self_healing_throttled' };
+  if (selfHealingSkippedReason === 'THROTTLED')
+    return { action: 'done', code: 'self_healing_throttled' };
 
   // --- Still running: CI ---
-  if (cipeStatus === 'IN_PROGRESS' || cipeStatus === 'NOT_STARTED') return { action: 'poll', code: 'ci_running' };
+  if (cipeStatus === 'IN_PROGRESS' || cipeStatus === 'NOT_STARTED')
+    return { action: 'poll', code: 'ci_running' };
 
   // --- Still running: self-healing ---
-  if ((selfHealingStatus === 'IN_PROGRESS' || selfHealingStatus === 'NOT_STARTED') && !selfHealingSkippedReason)
+  if (
+    (selfHealingStatus === 'IN_PROGRESS' || selfHealingStatus === 'NOT_STARTED') &&
+    !selfHealingSkippedReason
+  )
     return { action: 'poll', code: 'sh_running' };
 
   // --- Still running: flaky rerun ---
@@ -211,7 +220,8 @@ function classify() {
 
   // --- Auto-apply path (couldAutoApplyTasks) ---
   if (couldAutoApplyTasks === true) {
-    if (autoApplySkipped === true) return { action: 'done', code: 'fix_auto_apply_skipped', extra: { autoApplySkipReason } };
+    if (autoApplySkipped === true)
+      return { action: 'done', code: 'fix_auto_apply_skipped', extra: { autoApplySkipReason } };
     if (verificationStatus === 'NOT_STARTED' || verificationStatus === 'IN_PROGRESS')
       return { action: 'poll', code: 'verification_pending' };
     if (verificationStatus === 'COMPLETED') return { action: 'done', code: 'fix_auto_applying' };
@@ -220,19 +230,31 @@ function classify() {
 
   // --- Fix available ---
   if (selfHealingStatus === 'COMPLETED') {
-    if (verificationStatus === 'FAILED' || verificationStatus === 'NOT_EXECUTABLE' || (couldAutoApplyTasks !== true && !verificationStatus))
+    if (
+      verificationStatus === 'FAILED' ||
+      verificationStatus === 'NOT_EXECUTABLE' ||
+      (couldAutoApplyTasks !== true && !verificationStatus)
+    )
       return { action: 'done', code: 'fix_needs_review' };
 
     const tasks = categorizeTasks();
-    if (tasks.category === 'all_verified' || tasks.category === 'e2e_only') return { action: 'done', code: 'fix_apply_ready' };
-    return { action: 'done', code: 'fix_needs_local_verify', extra: { verifiableTaskIds: tasks.verifiableTaskIds } };
+    if (tasks.category === 'all_verified' || tasks.category === 'e2e_only')
+      return { action: 'done', code: 'fix_apply_ready' };
+    return {
+      action: 'done',
+      code: 'fix_needs_local_verify',
+      extra: { verifiableTaskIds: tasks.verifiableTaskIds },
+    };
   }
 
   // --- Fix failed ---
   if (selfHealingStatus === 'FAILED') return { action: 'done', code: 'fix_failed' };
 
   // --- No fix available ---
-  if (cipeStatus === 'FAILED' && (selfHealingEnabled === false || selfHealingStatus === 'NOT_EXECUTABLE'))
+  if (
+    cipeStatus === 'FAILED' &&
+    (selfHealingEnabled === false || selfHealingStatus === 'NOT_EXECUTABLE')
+  )
     return { action: 'done', code: 'no_fix' };
 
   // --- Fallback ---
@@ -272,22 +294,28 @@ const messages = {
   sh_running: () => `CI: ${cipeStatus} | Self-healing: ${selfHealingStatus}`,
   flaky_rerun: () => 'CI: FAILED | Classification: FLAKY_TASK (auto-rerun in progress)',
   fix_auto_applied: () => 'CI: FAILED | Fix auto-applied, new CI Attempt spawning',
-  verification_pending: () => `CI: FAILED | Self-healing: COMPLETED | Verification: ${verificationStatus}`,
+  verification_pending: () =>
+    `CI: FAILED | Self-healing: COMPLETED | Verification: ${verificationStatus}`,
 
   // actionable
   fix_auto_applying: () => 'Fix verified! Auto-applying...',
   fix_auto_apply_skipped: (extra) =>
     `Fix verified but auto-apply was skipped. ${
-      extra?.autoApplySkipReason ? `Reason: ${extra.autoApplySkipReason}` : 'Offer to apply manually.'
+      extra?.autoApplySkipReason ?
+        `Reason: ${extra.autoApplySkipReason}`
+      : 'Offer to apply manually.'
     }`,
-  fix_needs_review: () => `Fix available but needs review. Verification: ${verificationStatus || 'N/A'}`,
+  fix_needs_review: () =>
+    `Fix available but needs review. Verification: ${verificationStatus || 'N/A'}`,
   fix_apply_ready: () => 'Fix available and verified. Ready to apply.',
-  fix_needs_local_verify: (extra) => `Fix available. ${extra.verifiableTaskIds.length} task(s) need local verification.`,
+  fix_needs_local_verify: (extra) =>
+    `Fix available. ${extra.verifiableTaskIds.length} task(s) need local verification.`,
   fix_failed: () => 'Self-healing failed to generate a fix.',
   no_fix: () => 'CI failed, no fix available.',
 
   // fallback
-  fallback: () => `CI: ${cipeStatus || 'N/A'} | Self-healing: ${selfHealingStatus || 'N/A'} | Verification: ${verificationStatus || 'N/A'}`,
+  fallback: () =>
+    `CI: ${cipeStatus || 'N/A'} | Self-healing: ${selfHealingStatus || 'N/A'} | Verification: ${verificationStatus || 'N/A'}`,
 };
 
 // Codes where noProgressCount resets to 0 (genuine progress occurred)
@@ -327,7 +355,13 @@ function buildOutput(decision) {
   const rawMsg = msgFn ? msgFn(extra) : `Unknown: ${code}`;
   const message = formatMessage(rawMsg);
 
-  const result = { action, code, message, noProgressCount: resetProgressCodes.has(code) ? 0 : noProgressCount, envRerunCount };
+  const result = {
+    action,
+    code,
+    message,
+    noProgressCount: resetProgressCodes.has(code) ? 0 : noProgressCount,
+    envRerunCount,
+  };
 
   // Add delay
   if (action === 'wait') {

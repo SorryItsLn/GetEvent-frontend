@@ -1,2 +1,1 @@
-export * from './my-component/my-component';
-export * from './shared-ui/shared-ui';
+export * from './utils/form-control-wrapper';

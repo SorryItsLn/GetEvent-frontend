@@ -1,5 +1,11 @@
 {
-  "compilerOptions": { "outDir": "../../dist/out-tsc", "declaration": true, "declarationMap": true, "inlineSources": true, "types": [] },
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "types": []
+  },
   "exclude": [
     "src/**/*.spec.ts",
     "src/**/*.test.ts",

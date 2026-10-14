@@ -23,7 +23,9 @@ export class CookieService {
 }
 
 function getCookie(key: string) {
-  const value = document.cookie.match(new RegExp('(?:^|; )' + key.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)'));
+  const value = document.cookie.match(
+    new RegExp('(?:^|; )' + key.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)'),
+  );
   return value ? decodeURI(value[1]) : null;
 }
 

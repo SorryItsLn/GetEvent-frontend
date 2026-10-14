@@ -41,7 +41,11 @@ function gate() {
     const count = parseInt(getArg('--local-verify-count') || '0', 10);
     const max = parseInt(getArg('--local-verify-attempts') || '3', 10);
     if (count >= max) {
-      return output({ allowed: false, localVerifyCount: count, message: `Local fix budget exhausted (${count}/${max} attempts)` });
+      return output({
+        allowed: false,
+        localVerifyCount: count,
+        message: `Local fix budget exhausted (${count}/${max} attempts)`,
+      });
     }
     return output({ allowed: true, localVerifyCount: count + 1, message: null });
   }
@@ -73,7 +77,13 @@ function postAction() {
   // MCP-triggered or auto-applied: track by cipeUrl
   const cipeUrlActions = ['fix-auto-applying', 'apply-mcp', 'env-rerun'];
   // Local push: track by commitSha
-  const commitShaActions = ['apply-local-push', 'reject-fix-push', 'local-fix-push', 'auto-fix-push', 'empty-commit-push'];
+  const commitShaActions = [
+    'apply-local-push',
+    'reject-fix-push',
+    'local-fix-push',
+    'auto-fix-push',
+    'empty-commit-push',
+  ];
 
   const trackByCipeUrl = cipeUrlActions.includes(action);
   const trackByCommitSha = commitShaActions.includes(action);

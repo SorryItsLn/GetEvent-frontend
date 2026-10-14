@@ -15,13 +15,17 @@ import { ROUTING_LINKS } from '../consts/routing.consts';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
-  private readonly registerSignal = signal<UserRegisterReq>({ email: '', password: '', userName: '' });
+  readonly #router = inject(Router);
+  readonly #authService = inject(AuthService);
+  readonly #registerSignal = signal<UserRegisterReq>({
+    email: '',
+    password: '',
+    userName: '',
+  });
   protected readonly registerLinkRoute = `/${ROUTING_LINKS.SIGN_IN}`;
 
   protected readonly registerForm = form(
-    this.registerSignal,
+    this.#registerSignal,
     (schema) => {
       required(schema.email);
       email(schema.email);
@@ -38,11 +42,11 @@ export class RegisterComponent {
   );
 
   register(req: UserRegisterReq) {
-    this.authService
+    this.#authService
       .register(req)
-      .pipe(switchMap(() => this.authService.login({ email: req.email, password: req.password })))
+      .pipe(switchMap(() => this.#authService.login({ email: req.email, password: req.password })))
       .subscribe(() => {
-        this.router.navigateByUrl('/home');
+        this.#router.navigateByUrl('/home');
       });
   }
 }

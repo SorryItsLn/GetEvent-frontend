@@ -1,0 +1,36 @@
+<div class="sidebar">
+  <section class="sidebar__label">
+    <button appearance="flat" size="m" tuiButton type="button" (click)="navigateHome()">
+      <tui-icon icon="@tui.shield" />
+      <span class="sidebar__label-text">Event HUB</span>
+    </button>
+  </section>
+
+  <section class="sidebar__menu">
+    <header class="menu__header">Меню</header>
+    <div class="menu__content">
+      @for (item of SIDEBAR_MENU_ITEMS; track $index) {
+        <a class="menu__item" [routerLink]="[item.routerUrl]">
+          <tui-icon [icon]="`@tui.${item.icon}`" />
+          {{ item.name }}
+        </a>
+      }
+    </div>
+  </section>
+
+  <section class="sidebar__footer">
+    <button
+      appearance="flat"
+      class="sidebar__footer-user"
+      size="m"
+      tuiButton
+      type="button"
+      (click)="navigateToUserProfile()"
+    >
+      <div tuiAvatar="@tui.user"></div>
+      <div>
+        <div>{{ userMe()?.userName ?? userMe()?.email }}</div>
+      </div>
+    </button>
+  </section>
+</div>

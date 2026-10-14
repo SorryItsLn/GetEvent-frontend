@@ -1,0 +1,62 @@
+@use 'typography' as typography;
+
+.header {
+  &__title {
+    @include typography.title_h2;
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14.5px;
+  }
+}
+
+.section {
+  &__form {
+    max-width: 640px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  &__form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__form-footer {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__field-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  &__field-item {
+    flex-grow: 1;
+  }
+
+  &__field-label {
+    margin-bottom: 4px;
+    @include typography.form_label;
+  }
+
+  &__statuses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  &__separator {
+    height: 1px;
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+}

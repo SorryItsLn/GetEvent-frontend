@@ -1,13 +1,28 @@
 .auth-layout {
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  height: 100vh;
+  background-color: var(--bg);
 
-  &__header{
+  &__main {
+    flex-grow: 1;
+  }
+
+  &__sidebar {
+    z-index: 100;
+    position: sticky;
+    top: 0;
+    flex-grow: 0;
+  }
+
+  &__header {
+    z-index: 100;
+    position: sticky;
+    top: 0;
     align-self: flex-start;
   }
-  &__content{
+
+  &__content {
     flex-grow: 1;
+    padding: 24px;
   }
 }

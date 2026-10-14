@@ -127,7 +127,11 @@ Add `"jsx": "react-jsx"` — in `tsconfig.base.json` for single-framework worksp
 ```js
 import nx from '@nx/eslint-plugin';
 import baseConfig from '../../eslint.config.mjs';
-export default [...baseConfig, ...nx.configs['flat/react'], { files: ['**/*.ts', '**/*.tsx'], rules: {} }];
+export default [
+  ...baseConfig,
+  ...nx.configs['flat/react'],
+  { files: ['**/*.ts', '**/*.tsx'], rules: {} },
+];
 ```
 
 ### React Version Conflicts
@@ -193,8 +197,14 @@ import baseConfig from '../../eslint.config.mjs';
 export default [
   ...baseConfig,
   ...vue.configs['flat/recommended'],
-  { files: ['**/*.vue'], languageOptions: { parser: vueParser, parserOptions: { parser: tsParser } } },
-  { files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.vue'], rules: { 'vue/multi-word-component-names': 'off' } },
+  {
+    files: ['**/*.vue'],
+    languageOptions: { parser: vueParser, parserOptions: { parser: tsParser } },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.vue'],
+    rules: { 'vue/multi-word-component-names': 'off' },
+  },
 ];
 ```
 
@@ -224,7 +234,14 @@ When both frameworks coexist, several settings become per-project.
 {
   "plugins": [
     { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } },
-    { "plugin": "@nx/vite/plugin", "options": { "buildTargetName": "build", "typecheckTargetName": "typecheck", "testTargetName": "test" } }
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "typecheckTargetName": "typecheck",
+        "testTargetName": "test"
+      }
+    }
   ]
 }
 ```

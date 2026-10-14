@@ -1,0 +1,11 @@
+<tui-textfield [stringify]="stringifyVenue">
+  <input
+    placeholder="Начните вводить адрес"
+    tuiComboBox
+    [formControl]="control"
+    (input)="onSearch($event)"
+  />
+  @if (suggestions().length) {
+    <tui-data-list-wrapper *tuiDropdown [items]="suggestions()" />
+  }
+</tui-textfield>

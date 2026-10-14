@@ -17,13 +17,18 @@
         "tsConfig": "apps/shop/tsconfig.app.json",
         "assets": [
           { "glob": "**/*", "input": "apps/shop/public" },
-          { "glob": "**/*", "input": "node_modules/@taiga-ui/icons/src", "output": "assets/taiga-ui/icons" }
+          {
+            "glob": "**/*",
+            "input": "node_modules/@taiga-ui/icons/src",
+            "output": "assets/taiga-ui/icons"
+          }
         ],
         "styles": [
           "node_modules/@taiga-ui/styles/taiga-ui-theme.less",
           "node_modules/@taiga-ui/styles/taiga-ui-fonts.less",
-          "apps/shop/src/styles.css"
-        ]
+          "apps/shop/styles/style.scss"
+        ],
+        "stylePreprocessorOptions": { "includePaths": ["apps/shop/styles/mixins"] }
       },
       "configurations": {
         "production": {
@@ -46,11 +51,19 @@
         "development": { "buildTarget": "shop:build:development" }
       }
     },
-    "extract-i18n": { "executor": "@angular/build:extract-i18n", "options": { "buildTarget": "shop:build" } },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n",
+      "options": { "buildTarget": "shop:build" }
+    },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
-      "options": { "buildTarget": "shop:build", "port": 4200, "staticFilePath": "dist/apps/shop/browser", "spa": true }
+      "options": {
+        "buildTarget": "shop:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/shop/browser",
+        "spa": true
+      }
     }
   }
 }

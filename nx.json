@@ -7,7 +7,7 @@
       "linter": "eslint",
       "changeDetection": "OnPush",
       "standalone": true,
-      "style": "css",
+      "style": "scss",
       "unitTestRunner": "vitest-analog"
     },
     "@nx/angular:library": {
@@ -16,7 +16,17 @@
       "changeDetection": "OnPush",
       "standalone": true
     },
-    "@nx/angular:component": { "style": "css", "standalone": true, "type": "component" }
+    "@schematics/angular:directive": { "type": "directive", "skipTests": true },
+    "@schematics/angular:service": { "type": "service", "skipTests": true },
+    "@schematics/angular:pipe": { "type": "pipe", "skipTests": true },
+    "@schematics/angular:guard": { "typeSeparator": ".", "skipTests": true },
+    "@schematics/angular:resolver": { "typeSeparator": ".", "skipTests": true },
+    "@nx/angular:component": {
+      "style": "scss",
+      "standalone": true,
+      "type": "component",
+      "skipTests": true
+    }
   },
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],

@@ -6,7 +6,13 @@ export function isDefined<T>(value: T): value is NonNullable<T> {
 
 export function isPrimitive(value: unknown): value is Primitive {
   return (
-    isUndefined(value) || isNull(value) || isSymbol(value) || isBoolean(value) || isBigInt(value) || isNumber(value) || isString(value)
+    isUndefined(value) ||
+    isNull(value) ||
+    isSymbol(value) ||
+    isBoolean(value) ||
+    isBigInt(value) ||
+    isNumber(value) ||
+    isString(value)
   );
 }
 

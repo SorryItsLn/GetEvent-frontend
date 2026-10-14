@@ -5,6 +5,7 @@ export default [
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   { ignores: ['**/dist', '**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'] },
+  { linterOptions: { reportUnusedDisableDirectives: 'error', reportUnusedInlineConfigs: 'error' } },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
@@ -20,11 +21,37 @@ export default [
           ],
         },
       ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'PropertyDefinition[accessibility="private"]',
+          message: 'Используй нативное приватное поле (#field) вместо модификатора private.',
+        },
+        {
+          selector: 'MethodDefinition[accessibility="private"]',
+          message: 'Используй нативный приватный метод (#method) вместо модификатора private.',
+        },
+        {
+          selector: 'PropertyDefinition[readonly=false] > CallExpression[callee.name="inject"]',
+          message: 'Все зависимости, полученные через inject(...), должны быть readonly.',
+        },
+      ],
+      'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts', '**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+    files: [
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.cts',
+      '**/*.mts',
+      '**/*.js',
+      '**/*.jsx',
+      '**/*.cjs',
+      '**/*.mjs',
+    ],
     // Override or add rules here
     rules: {},
   },
+  { files: ['**/*.html'], rules: { '@angular-eslint/template/prefer-self-closing-tags': 'error' } },
 ];
