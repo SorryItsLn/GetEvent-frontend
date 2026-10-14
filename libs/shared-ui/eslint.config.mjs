@@ -7,7 +7,6 @@ export default [
   ...baseConfig,
   {
     files: ['**/*.ts'],
-    extends: ['plugin:@nx/angular', 'plugin:@angular-eslint/template/process-inline-templates'],
     rules: {
       '@angular-eslint/directive-selector': [
         'error',
@@ -19,5 +18,9 @@ export default [
       ],
     },
   },
-  { files: ['*.html'], extends: ['plugin:@nx/angular-template'], rules: {} },
+  {
+    files: ['**/*.html'],
+    // Override or add rules here
+    rules: {},
+  },
 ];

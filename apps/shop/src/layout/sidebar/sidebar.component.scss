@@ -7,11 +7,9 @@
   position: sticky;
   top: 0;
   flex-direction: column;
-
   width: 250px;
   height: 100vh;
   padding: 24px 16px;
-  gap: 28px;
   gap: 20px;
   border-right: 1px solid var(--border);
   background-color: var(--surface);
@@ -24,8 +22,6 @@
     flex-grow: 1;
   }
 
-  &__footer {
-  }
   &__footer-user {
     display: flex;
     justify-content: start;
@@ -49,8 +45,8 @@
     color: var(--text-muted);
     font-weight: 500;
     font-size: 14px;
+    text-decoration: none;
     cursor: pointer;
-
     transition:
       background 0.15s,
       color 0.15s;

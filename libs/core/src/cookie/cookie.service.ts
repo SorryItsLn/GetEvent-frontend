@@ -1,35 +1,35 @@
 import { Service } from '@angular/core';
 
 import { isDefined, isNumber } from '../common';
-import { CookieOptions, CookieSettings } from './types/cookie.type';
+import { CookieOptions, CookieSettings } from './types';
 
 @Service()
 export class CookieService {
-  exists(key: string) {
+  exists(key: string): boolean {
     return !!this.get(key);
   }
 
-  get(key: string) {
+  get(key: string): string | null {
     return getCookie(key);
   }
 
-  set(key: string, value: string, params?: CookieOptions) {
-    return setCookie(key, value, params);
+  set(key: string, value: string, params?: CookieOptions): void {
+    setCookie(key, value, params);
   }
 
-  remove(key: string) {
+  remove(key: string): void {
     this.set(key, '', { expires: 0 });
   }
 }
 
-function getCookie(key: string) {
+function getCookie(key: string): string | null {
   const value = document.cookie.match(
     new RegExp('(?:^|; )' + key.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)'),
   );
   return value ? decodeURI(value[1]) : null;
 }
 
-function setCookie(key: string, value: string, options: CookieOptions = {}) {
+function setCookie(key: string, value: string, options: CookieOptions = {}): void {
   const resultOptions: CookieSettings = { path: '/', samesite: true };
   if (isDefined(options.path)) {
     resultOptions.path = options.path;

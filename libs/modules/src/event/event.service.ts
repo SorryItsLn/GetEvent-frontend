@@ -22,7 +22,7 @@ export class EventApiService extends signalStore(
   readonly #apiGateway = inject(ApiGateway);
   readonly #baseUrl = 'event';
 
-  getById(id: string): Observable<Event | null> {
+  getById(id: Event['id']): Observable<GetEventByIdResponse> {
     return this.#apiGateway.get<GetEventByIdResponse>(`${this.#baseUrl}/GetById/${id}`);
   }
 
@@ -32,7 +32,7 @@ export class EventApiService extends signalStore(
     });
   }
 
-  create(request: CreateEventRequest): Observable<string> {
+  create(request: CreateEventRequest): Observable<CreateEventResponse> {
     return this.#apiGateway.post<CreateEventResponse>(`${this.#baseUrl}/Create`, { ...request });
   }
 }

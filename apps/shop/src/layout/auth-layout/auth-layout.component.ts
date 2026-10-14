@@ -1,22 +1,32 @@
-import { Component, afterNextRender, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  afterNextRender,
+  inject,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterOutlet } from '@angular/router';
-import { UserStore } from '@myorg/modules';
+import { UserApiService } from '@myorg/modules';
+import { take } from 'rxjs';
 
-import { HeaderComponent } from '../header/header.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
+import { HeaderComponent } from '../header';
+import { SidebarComponent } from '../sidebar';
 
 @Component({
   selector: 'app-auth-layout',
   imports: [RouterOutlet, HeaderComponent, SidebarComponent],
   templateUrl: './auth-layout.component.html',
   styleUrl: './auth-layout.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthLayoutComponent {
-  readonly #userState = inject(UserStore);
+  readonly #userService = inject(UserApiService);
+  readonly #destroyRef = inject(DestroyRef);
 
   constructor() {
     afterNextRender(() => {
-      this.#userState.getMe().subscribe();
+      this.#userService.getMe().pipe(take(1), takeUntilDestroyed(this.#destroyRef)).subscribe();
     });
   }
 }

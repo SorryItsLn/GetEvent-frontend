@@ -1,8 +1,8 @@
 import { Service, inject } from '@angular/core';
 import { ApiGateway, updateStoreEntities } from '@myorg/core';
-import { signalStore, type, withState } from '@ngrx/signals';
+import { signalStore, type } from '@ngrx/signals';
 import { entityConfig, withEntities } from '@ngrx/signals/entities';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import {
   CreateEventCategoryRequest,
@@ -10,8 +10,6 @@ import {
   EventCategory,
   GetEventCategoryByIdResponse,
 } from './types';
-
-type EventCategoryState = { categories: EventCategory[] };
 
 export const eventCategoryEntityConfig = entityConfig({
   entity: type<EventCategory>(),
@@ -22,25 +20,23 @@ export const eventCategoryEntityConfig = entityConfig({
 @Service()
 export class EventCategoryApiService extends signalStore(
   { protectedState: false },
-  withState<EventCategoryState>({ categories: [] }),
   withEntities(eventCategoryEntityConfig),
 ) {
   readonly #apiGateway = inject(ApiGateway);
   readonly #baseUrl = 'eventcategory';
 
-  getById(id: string): Observable<EventCategory | null> {
+  getById(id: EventCategory['id']): Observable<GetEventCategoryByIdResponse> {
     return this.#apiGateway.get<GetEventCategoryByIdResponse>(`${this.#baseUrl}/GetById/${id}`);
   }
 
   getAll(): Observable<EventCategory[]> {
-    if (this.categories().length) {
-      return of(this.categories());
+    if (this.eventCategoriesEntities().length) {
+      return of(this.eventCategoriesEntities());
     }
 
-    return this.#apiGateway.get<EventCategory[]>(`${this.#baseUrl}/GetAll`).pipe(
-      updateStoreEntities(this, eventCategoryEntityConfig),
-      tap((categories) => console.log('Fetched event categories:', this.eventCategoriesEntities())),
-    );
+    return this.#apiGateway
+      .get<EventCategory[]>(`${this.#baseUrl}/GetAll`)
+      .pipe(updateStoreEntities(this, eventCategoryEntityConfig));
   }
 
   create(request: CreateEventCategoryRequest): Observable<CreateEventCategoryResponse> {

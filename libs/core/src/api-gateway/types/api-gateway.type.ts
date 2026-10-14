@@ -20,3 +20,7 @@ export type RequestBody = JSONParams | HttpParams | FormData;
 export type RequestOptions = { queryParams?: QueryParams; context?: HttpContext };
 
 export type HttpClientRequestOptions = { context?: HttpContext; params?: HttpParams | QueryParams };
+
+export type Paginated<T> = { items: T[]; totalCount: number; page: number; pageSize: number };
+
+export type ApiErrorResponse = { error: string };

@@ -1,1 +1,1 @@
-export * from './routing.consts';
+export * from './user-routing.const';

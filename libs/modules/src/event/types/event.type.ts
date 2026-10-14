@@ -1,4 +1,4 @@
-// event.types.ts
+import type { Paginated } from '@myorg/core';
 
 export type EventStatus = 'Draft' | 'Published' | 'Cancelled' | 'Finished';
 
@@ -15,8 +15,6 @@ export type Event = {
   organizerId: string;
   status: EventStatus;
 };
-
-export type Paginated<T> = { items: T[]; totalCount: number; page: number; pageSize: number };
 
 // ---------- GET event/GetById/{id} ----------
 
@@ -46,7 +44,7 @@ export type CreateEventRequest = {
   venueId: string | null;
 };
 
-export type CreateEventResponse = string; // Guid созданного мероприятия
+export type CreateEventResponse = string;
 
 // ---------- PUT event/Update/{id} ----------
 
@@ -67,7 +65,3 @@ export type UpdateEventResponse = string;
 export type SetEventStatusRequest = EventStatus;
 
 export type SetEventStatusResponse = string;
-
-// ---------- Общий формат ошибки для всех эндпоинтов ----------
-
-export type ApiErrorResponse = { error: string };

@@ -1,2 +1,2 @@
-export * from './login/login.component';
-export * from './register/register.component';
+export * from './consts';
+export * from './auth.routes';

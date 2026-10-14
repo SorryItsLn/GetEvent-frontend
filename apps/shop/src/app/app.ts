@@ -1,19 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AuthService } from '@myorg/modules';
 import { TuiRoot } from '@taiga-ui/core';
 
-import { AuthLayoutComponent } from '../layout/auth-layout/auth-layout.component';
-import { UnauthLayoutComponent } from '../layout/unauth-layout/unauth-layout.component';
+import { AuthLayoutComponent, UnauthLayoutComponent } from '../layout';
 
 @Component({
-  imports: [RouterModule, TuiRoot, UnauthLayoutComponent, AuthLayoutComponent],
   selector: 'app-root',
+  imports: [TuiRoot, AuthLayoutComponent, UnauthLayoutComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  private readonly authService = inject(AuthService);
-  protected readonly isAuth = computed(() => this.authService.isAuth());
+  readonly #authService = inject(AuthService);
+
+  protected readonly isAuth = this.#authService.isAuth;
 }

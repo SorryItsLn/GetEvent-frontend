@@ -21,3 +21,9 @@
 - The `nx-generate` skill handles generator discovery internally - don't call nx_docs just to look up generator syntax
 
 <!-- nx configuration end-->
+
+# Стандарты кода
+
+Стандарты кода проекта описаны в AGENTS.md (раздел «Стандарты кода проекта») — следуй им.
+
+@AGENTS.md

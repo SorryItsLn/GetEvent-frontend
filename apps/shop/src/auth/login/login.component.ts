@@ -1,27 +1,32 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormField, FormRoot, email, form, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService, UserRegisterReq } from '@myorg/modules';
+import { AuthService, LoginRequest } from '@myorg/modules';
 import { TuiButton, TuiInput, TuiLink } from '@taiga-ui/core';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
 
-import { ROUTING_LINKS } from '../consts/routing.consts';
+import { HOME_ROUTING_BASE } from '../../home/consts';
+import { AUTH_ROUTING_LINKS } from '../consts';
 
 @Component({
   selector: 'app-login',
   imports: [TuiInput, FormField, FormRoot, TuiCardLarge, TuiForm, TuiButton, TuiLink, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  #authService = inject(AuthService);
-  #router = inject(Router);
+  readonly #authService = inject(AuthService);
+  readonly #router = inject(Router);
+  readonly #destroyRef = inject(DestroyRef);
 
-  #registerSignal = signal<Omit<UserRegisterReq, 'userName'>>({ email: '', password: '' });
-  protected readonly registerLinkRoute = `/${ROUTING_LINKS.SIGN_UP}`;
+  readonly #loginModel = signal<LoginRequest>({ email: '', password: '' });
 
-  protected readonly registerForm = form(
-    this.#registerSignal,
+  protected readonly REGISTER_ROUTE = `/${AUTH_ROUTING_LINKS.SIGN_UP}`;
+
+  protected readonly loginForm = form(
+    this.#loginModel,
     (schema) => {
       required(schema.email);
       email(schema.email);
@@ -30,16 +35,18 @@ export class LoginComponent {
     {
       submission: {
         action: async (field) => {
-          const data = field().value();
-          this.login(data);
+          this.#login(field().value());
         },
       },
     },
   );
 
-  login(req: Omit<UserRegisterReq, 'userName'>) {
-    this.#authService.login(req).subscribe(() => {
-      this.#router.navigateByUrl('/home');
-    });
+  #login(request: LoginRequest): void {
+    this.#authService
+      .login(request)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => {
+        this.#router.navigateByUrl(`/${HOME_ROUTING_BASE}`);
+      });
   }
 }

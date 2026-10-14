@@ -10,13 +10,14 @@
   </tui-textfield>
 
   <tui-textfield>
-    <input placeholder="password" tuiInput type="password" [formField]="registerForm.password" />
+    <input placeholder="Пароль" tuiInput type="password" [formField]="registerForm.password" />
   </tui-textfield>
 
   <tui-textfield>
-    <input placeholder="username" tuiInput [formField]="registerForm.userName" />
+    <input placeholder="Имя пользователя" tuiInput [formField]="registerForm.userName" />
   </tui-textfield>
 
-  <button class="register__button" tuiButton type="submit">Submit</button>
-  <a tuiLink [routerLink]="registerLinkRoute">Залогинится</a>
+  <button class="register__button" tuiButton type="submit">Зарегистрироваться</button>
+
+  <a tuiLink [routerLink]="LOGIN_ROUTE">Войти</a>
 </form>

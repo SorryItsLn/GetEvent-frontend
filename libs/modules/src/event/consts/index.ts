@@ -1,1 +1,1 @@
-export * from './event.consts';
+export * from './event.const';

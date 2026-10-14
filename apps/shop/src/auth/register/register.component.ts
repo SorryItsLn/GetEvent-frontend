@@ -1,31 +1,33 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormField, FormRoot, email, form, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService, UserRegisterReq } from '@myorg/modules';
+import { AuthService, RegisterRequest } from '@myorg/modules';
 import { TuiButton, TuiInput, TuiLink } from '@taiga-ui/core';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
 import { switchMap } from 'rxjs';
 
-import { ROUTING_LINKS } from '../consts/routing.consts';
+import { HOME_ROUTING_BASE } from '../../home/consts';
+import { AUTH_ROUTING_LINKS } from '../consts';
 
 @Component({
-  selector: 'app-auth-component',
-  imports: [TuiInput, FormField, FormRoot, TuiCardLarge, TuiForm, TuiButton, RouterLink, TuiLink],
+  selector: 'app-register',
+  imports: [TuiInput, FormField, FormRoot, TuiCardLarge, TuiForm, TuiButton, TuiLink, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  readonly #router = inject(Router);
   readonly #authService = inject(AuthService);
-  readonly #registerSignal = signal<UserRegisterReq>({
-    email: '',
-    password: '',
-    userName: '',
-  });
-  protected readonly registerLinkRoute = `/${ROUTING_LINKS.SIGN_IN}`;
+  readonly #router = inject(Router);
+  readonly #destroyRef = inject(DestroyRef);
+
+  readonly #registerModel = signal<RegisterRequest>({ email: '', password: '', userName: '' });
+
+  protected readonly LOGIN_ROUTE = `/${AUTH_ROUTING_LINKS.SIGN_IN}`;
 
   protected readonly registerForm = form(
-    this.#registerSignal,
+    this.#registerModel,
     (schema) => {
       required(schema.email);
       email(schema.email);
@@ -34,19 +36,23 @@ export class RegisterComponent {
     {
       submission: {
         action: async (field) => {
-          const data = field().value();
-          this.register(data);
+          this.#register(field().value());
         },
       },
     },
   );
 
-  register(req: UserRegisterReq) {
+  #register(request: RegisterRequest): void {
+    const { email, password } = request;
+
     this.#authService
-      .register(req)
-      .pipe(switchMap(() => this.#authService.login({ email: req.email, password: req.password })))
+      .register(request)
+      .pipe(
+        switchMap(() => this.#authService.login({ email, password })),
+        takeUntilDestroyed(this.#destroyRef),
+      )
       .subscribe(() => {
-        this.#router.navigateByUrl('/home');
+        this.#router.navigateByUrl(`/${HOME_ROUTING_BASE}`);
       });
   }
 }
