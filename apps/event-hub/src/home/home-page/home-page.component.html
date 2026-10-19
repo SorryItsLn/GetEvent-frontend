@@ -1,0 +1,73 @@
+<div class="home">
+  <section class="hero">
+    @if (userMe(); as user) {
+      <span class="hero__greeting">Привет, {{ user.userName || user.email }}</span>
+    }
+    <h1 class="hero__title">Мероприятия рядом — <span class="hero__accent">в пару кликов</span></h1>
+    <p class="hero__subtitle">
+      Event HUB помогает находить встречи по интересам, записываться на них и собирать своих людей.
+    </p>
+    <div class="hero__actions">
+      <a iconEnd="@tui.arrow-right" size="l" tuiButton [routerLink]="EVENT_LIST_ROUTE">
+        Смотреть мероприятия
+      </a>
+      <a
+        appearance="outline"
+        iconStart="@tui.calendar-plus"
+        size="l"
+        tuiButton
+        [routerLink]="EVENT_CREATION_ROUTE"
+      >
+        Создать своё
+      </a>
+    </div>
+  </section>
+
+  <section class="features">
+    @for (feature of HOME_FEATURES; track feature.title) {
+      <div class="features__item">
+        <div class="features__icon">
+          <tui-icon [icon]="feature.icon" />
+        </div>
+        <h3 class="features__title">{{ feature.title }}</h3>
+        <p class="features__description">{{ feature.description }}</p>
+      </div>
+    }
+  </section>
+
+  <section class="upcoming">
+    <header class="upcoming__header">
+      <h2 class="upcoming__title">Ближайшие мероприятия</h2>
+      <a
+        appearance="flat"
+        iconEnd="@tui.arrow-right"
+        size="s"
+        tuiButton
+        [routerLink]="EVENT_LIST_ROUTE"
+      >
+        Все мероприятия
+      </a>
+    </header>
+
+    @let events = upcomingEvents();
+
+    @if (events === undefined) {
+      <div class="upcoming__state">Загрузка…</div>
+    } @else if (events.length) {
+      <div class="upcoming__grid">
+        @for (event of events; track event.id) {
+          <app-event-card
+            [category]="eventCategoriesEntityMap()[event.categoryId]"
+            [event]="event"
+          />
+        }
+      </div>
+    } @else {
+      <div class="upcoming__empty">
+        <tui-icon class="upcoming__empty-icon" icon="@tui.sparkles" />
+        <p>Пока ничего не запланировано. Станьте первым организатором!</p>
+        <a size="m" tuiButton [routerLink]="EVENT_CREATION_ROUTE">Создать мероприятие</a>
+      </div>
+    }
+  </section>
+</div>

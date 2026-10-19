@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,10 +12,11 @@ import { TuiButton } from '@taiga-ui/core';
 import { take } from 'rxjs';
 
 import { EVENT_ROUTING_LINKS } from '../consts';
+import { EventCardComponent } from '../event-card';
 
 @Component({
   selector: 'app-event-list',
-  imports: [TuiButton, DatePipe, RouterLink],
+  imports: [TuiButton, RouterLink, EventCardComponent],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

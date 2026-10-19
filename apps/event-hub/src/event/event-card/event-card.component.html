@@ -1,0 +1,28 @@
+@let item = event();
+
+<a class="event-card" [routerLink]="['/', EVENT_ROUTING_BASE, item.id]">
+  <div class="event-card__date">
+    <span class="event-card__month">{{ item.startDate | date: 'MMM' }}</span>
+    <span class="event-card__day">{{ item.startDate | date: 'dd' }}</span>
+  </div>
+
+  <div class="event-card__body">
+    @if (category(); as eventCategory) {
+      <div class="event-card__cat">{{ eventCategory.name }}</div>
+    }
+    <h4 class="event-card__title">{{ item.title }}</h4>
+    @if (item.venueId) {
+      <div class="event-card__meta">
+        <tui-icon icon="@tui.map-pin" />
+        {{ item.venueId }}
+      </div>
+    }
+    <div class="event-card__foot">
+      @if (item.maxParticipants) {
+        <span>До {{ item.maxParticipants }} участников</span>
+      } @else {
+        <span>Без ограничений</span>
+      }
+    </div>
+  </div>
+</a>
