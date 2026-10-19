@@ -10,6 +10,8 @@ import {
   GetEventByIdResponse,
   GetPaginatedEventsQuery,
   GetPaginatedEventsResponse,
+  SetEventStatusRequest,
+  SetEventStatusResponse,
 } from './types';
 
 type EventState = { events: Event[] };
@@ -29,6 +31,12 @@ export class EventApiService extends signalStore(
   getPaginated(query: GetPaginatedEventsQuery): Observable<GetPaginatedEventsResponse> {
     return this.#apiGateway.get<GetPaginatedEventsResponse>(`${this.#baseUrl}/GetPaginated`, {
       queryParams: { ...query },
+    });
+  }
+
+  setStatus(id: Event['id'], status: SetEventStatusRequest): Observable<SetEventStatusResponse> {
+    return this.#apiGateway.put<SetEventStatusResponse>(`${this.#baseUrl}/SetStatus/${id}`, {
+      status,
     });
   }
 

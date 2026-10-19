@@ -86,3 +86,45 @@
     grid-template-columns: 1fr;
   }
 }
+
+.registration {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+
+  &__button {
+    width: 100%;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: var(--radius-sm);
+    background: var(--success-light);
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  &__closed {
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text-muted);
+    text-align: center;
+  }
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 14px;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+
+  &__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}

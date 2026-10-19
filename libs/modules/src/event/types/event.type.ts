@@ -16,11 +16,7 @@ export type Event = {
   status: EventStatus;
 };
 
-// ---------- GET event/GetById/{id} ----------
-
 export type GetEventByIdResponse = Event | null;
-
-// ---------- GET event/GetPaginated ----------
 
 export type GetPaginatedEventsQuery = {
   page: number;
@@ -30,8 +26,6 @@ export type GetPaginatedEventsQuery = {
 };
 
 export type GetPaginatedEventsResponse = Paginated<Event>;
-
-// ---------- POST event/Create ----------
 
 export type CreateEventRequest = {
   title: string;
@@ -46,8 +40,6 @@ export type CreateEventRequest = {
 
 export type CreateEventResponse = string;
 
-// ---------- PUT event/Update/{id} ----------
-
 export type UpdateEventRequest = {
   title: string;
   categoryId: string;
@@ -59,8 +51,6 @@ export type UpdateEventRequest = {
 };
 
 export type UpdateEventResponse = string;
-
-// ---------- PUT event/SetStatus/{id} ----------
 
 export type SetEventStatusRequest = EventStatus;
 

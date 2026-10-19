@@ -29,7 +29,7 @@ export class ApiGateway {
   delete<T>(path: string, options?: RequestOptions & { body?: RequestBody }): Observable<T> {
     const resultOptions = {
       ...transformOptions(options),
-      ...(isDefined(options?.body) ? { ...options.body } : {}),
+      ...(isDefined(options?.body) ? { body: options.body } : {}),
     };
     return this.#httpClient.delete<T>(buildUrl(path), resultOptions);
   }
@@ -40,6 +40,10 @@ function buildUrl(path: string): string {
 }
 
 function transformOptions(obj: RequestOptions = {}): HttpClientRequestOptions {
-  const { queryParams, context } = obj;
-  return { ...(queryParams ? { params: queryParams } : {}), ...(context ? { context } : {}) };
+  const { queryParams, context, headers } = obj;
+  return {
+    ...(queryParams ? { params: queryParams } : {}),
+    ...(context ? { context } : {}),
+    ...(headers ? { headers } : {}),
+  };
 }

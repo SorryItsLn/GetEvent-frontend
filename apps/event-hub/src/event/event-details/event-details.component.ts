@@ -6,18 +6,30 @@ import {
   afterNextRender,
   computed,
   inject,
+  linkedSignal,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { EventApiService, EventCategoryApiService } from '@myorg/modules';
-import { TuiButton } from '@taiga-ui/core';
-import { map, switchMap, take } from 'rxjs';
+import {
+  EVENT_STATUS,
+  Event,
+  EventApiService,
+  EventCategoryApiService,
+  EventStatus,
+  RegistrationApiService,
+  UserApiService,
+  getApiErrorMessage,
+} from '@myorg/modules';
+import { TuiButton, TuiIcon, TuiNotificationService } from '@taiga-ui/core';
+import { TuiButtonLoading } from '@taiga-ui/kit';
+import { finalize, map, shareReplay, switchMap, take } from 'rxjs';
 
-import { EVENT_ROUTING_PARAMS, EVENT_STATUS_LABELS } from '../consts';
+import { EVENT_ROUTING_PARAMS, EVENT_STATUS_LABELS, REGISTRATION_STATUS_LABELS } from '../consts';
 
 @Component({
   selector: 'app-event-details',
-  imports: [TuiButton, DatePipe, RouterLink],
+  imports: [TuiButton, TuiButtonLoading, TuiIcon, DatePipe, RouterLink],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,23 +38,73 @@ export class EventDetailsComponent {
   readonly #route = inject(ActivatedRoute);
   readonly #eventService = inject(EventApiService);
   readonly #eventCategoryService = inject(EventCategoryApiService);
+  readonly #registrationService = inject(RegistrationApiService);
+  readonly #userService = inject(UserApiService);
+  readonly #notificationService = inject(TuiNotificationService);
   readonly #destroyRef = inject(DestroyRef);
 
-  protected readonly EVENT_STATUS_LABELS = EVENT_STATUS_LABELS;
-
-  protected readonly event = toSignal(
-    this.#route.paramMap.pipe(
-      map((params) => params.get(EVENT_ROUTING_PARAMS.ID) ?? ''),
-      switchMap((id) => this.#eventService.getById(id)),
-    ),
+  readonly #eventId$ = this.#route.paramMap.pipe(
+    map((params) => params.get(EVENT_ROUTING_PARAMS.ID) ?? ''),
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
+
+  readonly #loadedEvent = toSignal(
+    this.#eventId$.pipe(switchMap((id) => this.#eventService.getById(id))),
+  );
+
+  protected readonly EVENT_STATUS = EVENT_STATUS;
+  protected readonly EVENT_STATUS_LABELS = EVENT_STATUS_LABELS;
+  protected readonly REGISTRATION_STATUS_LABELS = REGISTRATION_STATUS_LABELS;
+
+  protected readonly event = linkedSignal(() => this.#loadedEvent());
 
   protected readonly category = computed(() => {
     const event = this.event();
     return event ? this.#eventCategoryService.eventCategoriesEntityMap()[event.categoryId] : null;
   });
 
+  protected readonly isRegistering = signal(false);
+  protected readonly isStatusChanging = signal(false);
+
+  protected readonly canManageStatus = computed(() => {
+    const event = this.event();
+    const user = this.#userService.userMe();
+
+    if (!event || !user) {
+      return false;
+    }
+
+    return user.roles.includes('Admin') || event.organizerId === user.id;
+  });
+
+  readonly #activeRegistrations = computed(() => {
+    const eventId = this.event()?.id;
+    return this.#registrationService
+      .registrationsEntities()
+      .filter((registration) => registration.eventId === eventId)
+      .filter((registration) => registration.status !== 'Cancelled');
+  });
+
+  protected readonly participantsCount = computed(() => this.#activeRegistrations().length);
+
+  protected readonly myRegistration = computed(() => {
+    const userId = this.#userService.userMe()?.id;
+    return this.#activeRegistrations().find((registration) => registration.userId === userId);
+  });
+
+  protected readonly registrationClosedReason = computed(() => {
+    const event = this.event();
+    return event ? getRegistrationClosedReason(event) : null;
+  });
+
   constructor() {
+    this.#eventId$
+      .pipe(
+        switchMap((id) => this.#registrationService.getByEventId(id)),
+        takeUntilDestroyed(),
+      )
+      .subscribe();
+
     afterNextRender(() => {
       this.#eventCategoryService
         .getAll()
@@ -50,4 +112,88 @@ export class EventDetailsComponent {
         .subscribe();
     });
   }
+
+  protected changeStatus(status: EventStatus): void {
+    const event = this.event();
+
+    if (!event || event.status === status || this.isStatusChanging()) {
+      return;
+    }
+
+    this.isStatusChanging.set(true);
+
+    this.#eventService
+      .setStatus(event.id, status)
+      .pipe(
+        take(1),
+        finalize(() => this.isStatusChanging.set(false)),
+        takeUntilDestroyed(this.#destroyRef),
+      )
+      .subscribe({
+        next: () => {
+          this.event.set({ ...event, status });
+          this.#notificationService
+            .open(`Статус изменён: ${EVENT_STATUS_LABELS[status]}`, { appearance: 'positive' })
+            .subscribe();
+        },
+        error: (error: unknown) => {
+          this.#notificationService
+            .open(getApiErrorMessage(error, 'Не удалось изменить статус'), {
+              appearance: 'negative',
+            })
+            .subscribe();
+        },
+      });
+  }
+
+  protected register(): void {
+    const eventId = this.event()?.id;
+    const userId = this.#userService.userMe()?.id;
+
+    if (!eventId || !userId || this.isRegistering()) {
+      return;
+    }
+
+    this.isRegistering.set(true);
+
+    this.#registrationService
+      .create({ eventId, userId })
+      .pipe(
+        switchMap(() => this.#registrationService.getByEventId(eventId)),
+        take(1),
+        finalize(() => this.isRegistering.set(false)),
+        takeUntilDestroyed(this.#destroyRef),
+      )
+      .subscribe({
+        next: () => {
+          this.#notificationService
+            .open('Вы записались на мероприятие', { appearance: 'positive' })
+            .subscribe();
+        },
+        error: (error: unknown) => {
+          this.#notificationService
+            .open(getApiErrorMessage(error, 'Не удалось записаться, попробуйте ещё раз'), {
+              appearance: 'negative',
+            })
+            .subscribe();
+        },
+      });
+  }
+}
+
+function getRegistrationClosedReason({ status, registrationDeadline }: Event): string | null {
+  switch (status) {
+    case 'Draft':
+      return 'Запись откроется после публикации';
+    case 'Cancelled':
+      return 'Мероприятие отменено';
+    case 'Finished':
+      return 'Мероприятие завершено';
+  }
+
+  if (registrationDeadline && new Date(registrationDeadline).getTime() < Date.now()) {
+    return 'Регистрация закрыта';
+  }
+
+  return null;
 }

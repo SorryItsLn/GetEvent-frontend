@@ -1,4 +1,4 @@
-import { HttpContext, HttpParams } from '@angular/common/http';
+import { HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
 
 export type Params<T> = { [p: string]: T };
 export type JSONParams = Params<JSONValue>;
@@ -15,11 +15,21 @@ export type FormDataParamsInputObject = {
 
 export type FormDataValue = undefined | null | boolean | number | string | File | FormDataValue[];
 
-export type RequestBody = JSONParams | HttpParams | FormData;
+export type RequestBody = JSONParams | HttpParams | FormData | string;
 
-export type RequestOptions = { queryParams?: QueryParams; context?: HttpContext };
+export type RequestHeaders = HttpHeaders | Record<string, string | string[]>;
 
-export type HttpClientRequestOptions = { context?: HttpContext; params?: HttpParams | QueryParams };
+export type RequestOptions = {
+  queryParams?: QueryParams;
+  context?: HttpContext;
+  headers?: RequestHeaders;
+};
+
+export type HttpClientRequestOptions = {
+  context?: HttpContext;
+  params?: HttpParams | QueryParams;
+  headers?: RequestHeaders;
+};
 
 export type Paginated<T> = { items: T[]; totalCount: number; page: number; pageSize: number };
 

@@ -29,6 +29,48 @@
       </div>
 
       <aside class="section__info">
+        <div class="registration">
+          @if (myRegistration(); as registration) {
+            <div class="registration__status">
+              <tui-icon icon="@tui.circle-check" />
+              {{ REGISTRATION_STATUS_LABELS[registration.status] }}
+            </div>
+          } @else if (registrationClosedReason(); as reason) {
+            <div class="registration__closed">{{ reason }}</div>
+          } @else {
+            <button
+              class="registration__button"
+              size="m"
+              tuiButton
+              type="button"
+              [loading]="isRegistering()"
+              (click)="register()"
+            >
+              Записаться
+            </button>
+          }
+        </div>
+
+        @if (canManageStatus()) {
+          <div class="status">
+            <span class="section__label">Статус мероприятия</span>
+            <div class="status__options">
+              @for (status of EVENT_STATUS; track status) {
+                <button
+                  size="xs"
+                  tuiButton
+                  type="button"
+                  [appearance]="status === item.status ? 'primary' : 'outline'"
+                  [disabled]="isStatusChanging()"
+                  (click)="changeStatus(status)"
+                >
+                  {{ EVENT_STATUS_LABELS[status] }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+
         <div class="section__info-row">
           <span class="section__label">Начало</span>
           <span>{{ item.startDate | date: 'd MMMM y, HH:mm' }}</span>
@@ -50,8 +92,12 @@
           <span>{{ item.venueId || 'Не указана' }}</span>
         </div>
         <div class="section__info-row">
-          <span class="section__label">Максимум участников</span>
-          <span>{{ item.maxParticipants || 'Без ограничений' }}</span>
+          <span class="section__label">Участники</span>
+          @if (item.maxParticipants) {
+            <span>{{ participantsCount() }} из {{ item.maxParticipants }}</span>
+          } @else {
+            <span>{{ participantsCount() }}, без ограничений</span>
+          }
         </div>
       </aside>
     </section>

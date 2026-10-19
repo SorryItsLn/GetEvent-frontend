@@ -9,6 +9,8 @@ export type Registration = {
   cancelledAt: string | null;
 };
 
-export type CreateRegistrationRequest = { eventId: string };
+export type CreateRegistrationRequest = { eventId: string; userId: string };
 
 export type CreateRegistrationResponse = string;
+
+export type CountActiveRegistrationsResponse = number;
