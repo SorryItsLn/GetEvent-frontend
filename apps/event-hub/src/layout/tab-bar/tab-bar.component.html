@@ -1,0 +1,8 @@
+<nav aria-label="Основная навигация" class="tab-bar">
+  @for (item of TAB_BAR_NAVIGATION; track item.route) {
+    <a class="tab-bar__item" routerLinkActive="tab-bar__item_active" [routerLink]="item.route">
+      <tui-icon class="tab-bar__icon" [icon]="item.icon" />
+      <span class="tab-bar__label">{{ item.name }}</span>
+    </a>
+  }
+</nav>

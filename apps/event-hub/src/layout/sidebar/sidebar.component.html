@@ -1,33 +1,46 @@
 <div class="sidebar">
   <section class="sidebar__label">
-    <a appearance="flat" size="m" tuiButton [routerLink]="HOME_ROUTE">
+    <a
+      appearance="flat"
+      class="sidebar__logo"
+      size="m"
+      title="Event HUB"
+      tuiButton
+      [routerLink]="HOME_ROUTE"
+    >
       <tui-icon icon="@tui.shield" />
       <span class="sidebar__label-text">Event HUB</span>
     </a>
   </section>
 
-  <section class="sidebar__menu">
+  <nav aria-label="Основная навигация" class="sidebar__menu">
     <header class="menu__header">Меню</header>
     <div class="menu__content">
-      @for (item of SIDEBAR_MENU_ITEMS; track item.routerUrl) {
-        <a class="menu__item" routerLinkActive="menu__item_active" [routerLink]="item.routerUrl">
-          <tui-icon [icon]="`@tui.${item.icon}`" />
-          {{ item.name }}
+      @for (item of MAIN_NAVIGATION; track item.route) {
+        <a
+          class="menu__item"
+          routerLinkActive="menu__item_active"
+          [attr.title]="item.name"
+          [routerLink]="item.route"
+        >
+          <tui-icon [icon]="item.icon" />
+          <span class="menu__text">{{ item.name }}</span>
         </a>
       }
     </div>
-  </section>
+  </nav>
 
   <section class="sidebar__footer">
     <a
       appearance="flat"
       class="sidebar__footer-user"
       size="m"
+      title="Профиль"
       tuiButton
       [routerLink]="USER_PROFILE_ROUTE"
     >
       <div tuiAvatar="@tui.user"></div>
-      <div>{{ userMe()?.userName ?? userMe()?.email }}</div>
+      <span class="sidebar__user-name">{{ userMe()?.userName ?? userMe()?.email }}</span>
     </a>
   </section>
 </div>

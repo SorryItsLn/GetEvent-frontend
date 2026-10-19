@@ -1,6 +1,9 @@
+@use 'breakpoints' as bp;
 @use 'typography' as typography;
 
 .header {
+  margin-bottom: 16px;
+
   &__title {
     @include typography.title_h2;
   }
@@ -34,7 +37,7 @@
 
   &__field-row {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 
@@ -58,5 +61,29 @@
     margin: 20px 0;
     border: none;
     border-top: 1px solid var(--border);
+  }
+}
+
+@include bp.mobile {
+  .section {
+    &__form {
+      padding: 16px;
+    }
+
+    &__field-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    &__separator {
+      margin: 12px 0;
+    }
+
+    &__form-footer {
+      flex-direction: column;
+
+      > * {
+        width: 100%;
+      }
+    }
   }
 }

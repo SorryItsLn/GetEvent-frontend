@@ -104,6 +104,11 @@ event/
 - Стили только в `.scss`, классы по BEM (`.block__element`, модификатор `_mod`). Корневой класс шаблона совпадает с именем компонента (`.event-list`).
 - Цвета, радиусы и отступы берутся из CSS-переменных (`var(--surface)`, `var(--radius)`), типографика — из миксинов `@use 'typography'`.
 - Формат кода определяет prettier (`prettier.config.mjs`): сортировка импортов и атрибутов, порядок CSS-свойств. Руками это не выравниваем.
+- Адаптив только через миксины из `styles/mixins/_breakpoints.scss` (`@use 'breakpoints' as bp;`): `bp.mobile` (< 768px, таб-бар внизу), `bp.tablet` (768–1023px, сайдбар из иконок), `bp.below-desktop`, `bp.desktop` (≥ 1024px). Свои `@media (max-width: ...)` не пишем.
+- Hover-эффекты оборачиваем в `@include bp.hover`, чтобы они не залипали на тач-экранах.
+- Сетки карточек: `repeat(auto-fill, minmax(min(260px, 100%), 1fr))`. У flex/grid-детей, которые могут сжиматься, ставим `min-width: 0`.
+- Размеры каркаса берём из токенов `--header-height`, `--tab-bar-height`, `--content-padding`. Отступ под таб-бар и safe-area (`env(safe-area-inset-bottom)`) уже учтён в `auth-layout`.
+- Шрифт в полях ввода на мобильном не меньше 16px, иначе iOS приближает страницу при фокусе.
 
 ## Тесты
 

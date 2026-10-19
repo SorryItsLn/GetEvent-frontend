@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 :host {
   display: block;
 }
@@ -20,9 +22,11 @@
     border-color 0.15s,
     transform 0.15s;
 
-  &:hover {
-    transform: translateY(-2px);
-    border-color: var(--cover-fg);
+  @include bp.hover {
+    &:hover {
+      transform: translateY(-2px);
+      border-color: var(--cover-fg);
+    }
   }
 
   &_sage {

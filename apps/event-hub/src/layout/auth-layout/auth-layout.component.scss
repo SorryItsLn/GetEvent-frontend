@@ -1,28 +1,57 @@
+@use 'breakpoints' as bp;
+
 .auth-layout {
   display: flex;
-  justify-content: center;
+  min-height: 100vh;
   background-color: var(--bg);
 
   &__main {
+    display: flex;
     flex-grow: 1;
+    flex-direction: column;
+    min-width: 0;
   }
 
   &__sidebar {
     z-index: 100;
     position: sticky;
     top: 0;
-    flex-grow: 0;
+    flex-shrink: 0;
+    align-self: flex-start;
   }
 
   &__header {
     z-index: 100;
     position: sticky;
     top: 0;
-    align-self: flex-start;
   }
 
   &__content {
     flex-grow: 1;
-    padding: 24px;
+    min-width: 0;
+    padding: var(--content-padding);
+  }
+
+  &__tab-bar {
+    display: none;
+  }
+
+  @include bp.mobile {
+    &__sidebar {
+      display: none;
+    }
+
+    &__content {
+      padding: 16px 16px calc(var(--tab-bar-height) + env(safe-area-inset-bottom) + 16px);
+    }
+
+    &__tab-bar {
+      display: block;
+      z-index: 100;
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
 }

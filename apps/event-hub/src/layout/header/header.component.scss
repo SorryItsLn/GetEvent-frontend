@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 :host {
   display: block;
   width: 100%;
@@ -8,7 +10,38 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: end;
-  height: 60px;
-  margin: 0 10px;
+  justify-content: flex-end;
+  height: var(--header-height);
+  padding: 0 var(--content-padding);
+  padding-top: env(safe-area-inset-top);
+
+  &__logo {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-text);
+    text-decoration: none;
+  }
+
+  &__logo-text {
+    color: var(--text);
+    font-weight: 800;
+    font-size: 17px;
+    font-family: var(--font-display);
+  }
+
+  @include bp.mobile {
+    justify-content: flex-start;
+    height: calc(var(--header-height) - 4px + env(safe-area-inset-top));
+    padding-right: 16px;
+    padding-left: 16px;
+
+    &__logo {
+      display: flex;
+    }
+
+    &__logout {
+      display: none;
+    }
+  }
 }

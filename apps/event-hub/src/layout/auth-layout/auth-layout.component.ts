@@ -12,10 +12,11 @@ import { take } from 'rxjs';
 
 import { HeaderComponent } from '../header';
 import { SidebarComponent } from '../sidebar';
+import { TabBarComponent } from '../tab-bar';
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, HeaderComponent, SidebarComponent],
+  imports: [RouterOutlet, HeaderComponent, SidebarComponent, TabBarComponent],
   templateUrl: './auth-layout.component.html',
   styleUrl: './auth-layout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

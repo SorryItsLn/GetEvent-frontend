@@ -1,1 +1,30 @@
-<p>user-profile works!</p>
+<div class="user-profile">
+  <h2 class="user-profile__title">Профиль</h2>
+
+  @if (user(); as currentUser) {
+    <section class="card">
+      <div class="card__avatar">{{ initial() }}</div>
+      <div class="card__info">
+        <span class="card__name">{{ currentUser.userName || 'Без имени' }}</span>
+        <span class="card__email">{{ currentUser.email }}</span>
+        @if (currentUser.roles.includes('Admin')) {
+          <span class="card__role">Администратор</span>
+        }
+      </div>
+    </section>
+  } @else {
+    <div class="user-profile__state">Загрузка…</div>
+  }
+
+  <button
+    appearance="outline"
+    class="user-profile__logout"
+    size="m"
+    tuiButton
+    type="button"
+    (click)="logout()"
+  >
+    <tui-icon icon="@tui.log-out" />
+    Выйти
+  </button>
+</div>

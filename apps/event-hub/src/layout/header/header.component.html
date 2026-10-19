@@ -1,8 +1,18 @@
 <header class="header">
-  <div class="header__user">
-    <button appearance="outline" size="s" tuiButton type="button" (click)="logout()">
-      <tui-icon icon="@tui.log-out" />
-      Выйти
-    </button>
-  </div>
+  <a class="header__logo" [routerLink]="HOME_ROUTE">
+    <tui-icon icon="@tui.shield" />
+    <span class="header__logo-text">Event HUB</span>
+  </a>
+
+  <button
+    appearance="outline"
+    class="header__logout"
+    size="s"
+    tuiButton
+    type="button"
+    (click)="logout()"
+  >
+    <tui-icon icon="@tui.log-out" />
+    Выйти
+  </button>
 </header>
