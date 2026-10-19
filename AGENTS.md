@@ -28,7 +28,7 @@
 
 ## Структура воркспейса
 
-- `apps/event-hub` — приложение. Фичи: `auth`, `home`, `user`, `event`, плюс `layout` и `not-found`.
+- `apps/event-hub` — приложение. Фичи: `auth`, `home`, `user`, `event`, `registration`, плюс `layout` и `not-found`.
 - `libs/core` (`@myorg/core`) — инфраструктура: `ApiGateway`, `CookieService`, `LocalStorageService`, утилиты стора, общие типы (`Paginated`, `ApiErrorResponse`).
 - `libs/modules` (`@myorg/modules`) — доменные API-сервисы, гарды и типы: `auth`, `event`, `nominatim`, `registration`, `user`, `venue`.
 - `libs/shared-ui` (`@myorg/shared-ui`) — переиспользуемые UI-утилиты (`FormControlWrapper`).

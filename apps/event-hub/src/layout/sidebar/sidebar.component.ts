@@ -6,6 +6,7 @@ import { TuiAvatar } from '@taiga-ui/kit';
 
 import { EVENT_ROUTING_BASE } from '../../event/consts';
 import { HOME_ROUTING_BASE } from '../../home/consts';
+import { REGISTRATION_ROUTING_BASE } from '../../registration/consts';
 import { USER_ROUTING_BASE, USER_ROUTING_LINKS } from '../../user/consts';
 
 @Component({
@@ -24,6 +25,6 @@ export class SidebarComponent {
   protected readonly USER_PROFILE_ROUTE = `/${USER_ROUTING_BASE}/${USER_ROUTING_LINKS.ME}`;
   protected readonly SIDEBAR_MENU_ITEMS = [
     { icon: 'calendar', routerUrl: `/${EVENT_ROUTING_BASE}`, name: 'Мероприятия' },
-    { icon: 'square-check-big', routerUrl: '/my-registration', name: 'Мои записи' },
+    { icon: 'square-check-big', routerUrl: `/${REGISTRATION_ROUTING_BASE}`, name: 'Мои записи' },
   ];
 }

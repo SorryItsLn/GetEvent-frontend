@@ -4,6 +4,7 @@ import { authGuard, unAuthGuard } from '@myorg/modules';
 import { AUTH_ROUTING_BASE } from '../auth/consts';
 import { EVENT_ROUTING_BASE } from '../event/consts';
 import { HOME_ROUTING_BASE } from '../home/consts';
+import { REGISTRATION_ROUTING_BASE } from '../registration/consts';
 import { USER_ROUTING_BASE } from '../user/consts';
 
 export const appRoutes: Routes = [
@@ -26,6 +27,11 @@ export const appRoutes: Routes = [
   {
     path: EVENT_ROUTING_BASE,
     loadChildren: async () => (await import('../event')).eventRoutes,
+    canActivate: [authGuard],
+  },
+  {
+    path: REGISTRATION_ROUTING_BASE,
+    loadChildren: async () => (await import('../registration')).registrationRoutes,
     canActivate: [authGuard],
   },
   { path: '**', loadComponent: async () => (await import('../not-found')).NotFoundComponent },

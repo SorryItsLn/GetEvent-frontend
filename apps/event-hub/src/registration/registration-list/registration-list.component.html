@@ -1,0 +1,62 @@
+<div class="registration-list">
+  <header class="header">
+    <h2 class="header__title">Мои записи</h2>
+    <p class="header__subtitle">Мероприятия, на которые вы записались</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="state">Загрузка…</div>
+  } @else if (isEmpty()) {
+    <div class="empty">
+      <tui-icon class="empty__icon" icon="@tui.calendar-heart" />
+      <p class="empty__title">Вы пока никуда не записались</p>
+      <p class="empty__text">Найдите мероприятие по душе и займите место.</p>
+      <a size="m" tuiButton [routerLink]="EVENT_LIST_ROUTE">Смотреть мероприятия</a>
+    </div>
+  } @else {
+    <section class="group">
+      <h3 class="group__title">
+        Предстоящие
+        <span class="group__count">{{ upcoming().length }}</span>
+      </h3>
+
+      @if (upcoming().length) {
+        <div class="group__grid">
+          @for (item of upcoming(); track item.registration.id) {
+            <app-event-card
+              [category]="eventCategoriesEntityMap()[item.event.categoryId]"
+              [event]="item.event"
+            >
+              <span
+                class="status"
+                [class.status_waitlisted]="item.registration.status === 'Waitlisted'"
+              >
+                {{ REGISTRATION_STATUS_LABELS[item.registration.status] }}
+              </span>
+            </app-event-card>
+          }
+        </div>
+      } @else {
+        <p class="group__empty">Предстоящих мероприятий нет</p>
+      }
+    </section>
+
+    @if (past().length) {
+      <section class="group">
+        <h3 class="group__title">
+          Прошедшие
+          <span class="group__count">{{ past().length }}</span>
+        </h3>
+
+        <div class="group__grid">
+          @for (item of past(); track item.registration.id) {
+            <app-event-card
+              [category]="eventCategoriesEntityMap()[item.event.categoryId]"
+              [event]="item.event"
+            />
+          }
+        </div>
+      </section>
+    }
+  }
+</div>
