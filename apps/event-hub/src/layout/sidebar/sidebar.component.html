@@ -10,7 +10,7 @@
     <header class="menu__header">Меню</header>
     <div class="menu__content">
       @for (item of SIDEBAR_MENU_ITEMS; track item.routerUrl) {
-        <a class="menu__item" [routerLink]="item.routerUrl">
+        <a class="menu__item" routerLinkActive="menu__item_active" [routerLink]="item.routerUrl">
           <tui-icon [icon]="`@tui.${item.icon}`" />
           {{ item.name }}
         </a>

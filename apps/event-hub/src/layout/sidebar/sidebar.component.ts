@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UserApiService } from '@myorg/modules';
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TuiAvatar } from '@taiga-ui/kit';
@@ -10,7 +10,7 @@ import { USER_ROUTING_BASE, USER_ROUTING_LINKS } from '../../user/consts';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [TuiIcon, TuiButton, TuiAvatar, RouterLink],
+  imports: [TuiIcon, TuiButton, TuiAvatar, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
