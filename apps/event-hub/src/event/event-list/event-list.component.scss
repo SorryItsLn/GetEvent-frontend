@@ -1,21 +1,103 @@
+@use 'breakpoints' as bp;
 @use 'typography' as typography;
 
 .event-list {
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-    &__title {
-      @include typography.title_h2;
-    }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  &__info {
+    display: flex;
+    column-gap: 12px;
+    flex-wrap: wrap;
+    align-items: baseline;
   }
 
-  .section {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
-    gap: 16px;
+  &__title {
+    @include typography.title_h2;
+  }
+
+  &__count {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+}
+
+.state {
+  color: var(--text-muted);
+}
+
+.section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  gap: 16px;
+  transition: opacity 0.15s;
+
+  &_loading {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+
+  &__size {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__label {
+    color: var(--text-muted);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  &__pagination {
+    margin-left: auto;
+  }
+
+  @include bp.mobile {
+    flex-direction: column-reverse;
+
+    &__pagination {
+      margin-left: 0;
+    }
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px;
+  gap: 8px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-align: center;
+
+  &__title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 17px;
+    font-family: var(--font-display);
+  }
+
+  &__text {
+    margin: 0 0 8px;
+    color: var(--text-muted);
   }
 }

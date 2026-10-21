@@ -1,13 +1,70 @@
 <div class="event-list">
   <header class="header">
-    <h2 class="header__title">Мероприятия</h2>
-    <div class="header__create">
-      <a size="s" tuiButton [routerLink]="[EVENT_CREATION_ROUTE]">Создать</a>
+    <div class="header__info">
+      <h2 class="header__title">Мероприятия</h2>
+      @if (events(); as page) {
+        <span class="header__count">{{ page.totalCount | i18nPlural: EVENT_COUNT_PLURAL }}</span>
+      }
     </div>
+    <a size="s" tuiButton [routerLink]="[EVENT_CREATION_ROUTE]">Создать</a>
   </header>
-  <section class="section">
-    @for (item of events()?.items; track item.id) {
-      <app-event-card [category]="eventCategoriesEntityMap()[item.categoryId]" [event]="item" />
+
+  @let page = events();
+
+  @if (!page) {
+    <div class="state">Загрузка…</div>
+  } @else if (!page.totalCount) {
+    <div class="empty">
+      <p class="empty__title">Мероприятий пока нет</p>
+      <p class="empty__text">Создайте первое — участники найдут его здесь.</p>
+      <a size="m" tuiButton [routerLink]="[EVENT_CREATION_ROUTE]">Создать мероприятие</a>
+    </div>
+  } @else if (!page.items.length) {
+    <div class="empty">
+      <p class="empty__title">На этой странице ничего нет</p>
+      <button size="m" tuiButton type="button" (click)="goToPage(0)">К первой странице</button>
+    </div>
+  } @else {
+    @if (hasControls()) {
+      <ng-container [ngTemplateOutlet]="listControls" />
     }
-  </section>
+
+    <section class="section" [class.section_loading]="isLoading()">
+      @for (item of page.items; track item.id) {
+        <app-event-card [category]="eventCategoriesEntityMap()[item.categoryId]" [event]="item" />
+      }
+    </section>
+
+    @if (hasControls()) {
+      <ng-container [ngTemplateOutlet]="listControls" />
+    }
+  }
 </div>
+
+<ng-template #listControls>
+  <div class="controls">
+    @if (showPageSize()) {
+      <div class="controls__size">
+        <span class="controls__label">Показывать по</span>
+        <tui-segmented
+          size="s"
+          [activeItemIndex]="pageSizeIndex()"
+          (activeItemIndexChange)="changePageSize($event)"
+        >
+          @for (size of EVENT_LIST_PAGE_SIZES; track size) {
+            <button type="button">{{ size }}</button>
+          }
+        </tui-segmented>
+      </div>
+    }
+
+    @if (pagesCount() > 1) {
+      <tui-pagination
+        class="controls__pagination"
+        [index]="pageIndex()"
+        [length]="pagesCount()"
+        (indexChange)="goToPage($event)"
+      />
+    }
+  </div>
+</ng-template>
