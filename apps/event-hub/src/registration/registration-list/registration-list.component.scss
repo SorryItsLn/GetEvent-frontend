@@ -97,6 +97,11 @@
   white-space: nowrap;
 
   &_waitlisted {
+    background: var(--tint-amber-bg);
+    color: var(--tint-amber-fg);
+  }
+
+  &_cancelled {
     background: var(--surface-alt);
     color: var(--text-muted);
   }

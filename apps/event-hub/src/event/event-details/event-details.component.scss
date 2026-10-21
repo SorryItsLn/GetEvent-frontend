@@ -18,9 +18,44 @@
 
 .header {
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 12px;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    gap: 6px;
+  }
+
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  &__role {
+    padding: 2px 10px;
+    border-radius: var(--radius-lg);
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  &__edit {
+    flex-shrink: 0;
+  }
+
+  @include bp.mobile {
+    flex-direction: column;
+
+    &__edit {
+      align-self: stretch;
+    }
+  }
 
   &__cat {
     color: var(--accent);
@@ -114,6 +149,16 @@
     background: var(--success-light);
     color: var(--success);
     font-weight: 600;
+
+    &_waitlisted {
+      background: var(--tint-amber-bg);
+      color: var(--tint-amber-fg);
+    }
+
+    &_cancelled {
+      background: var(--surface-alt);
+      color: var(--text-muted);
+    }
   }
 
   &__closed {
@@ -136,5 +181,41 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+  }
+}
+
+.tabs {
+  &__counter {
+    margin-left: 6px;
+    padding: 0 7px;
+    border-radius: var(--radius-lg);
+    background: var(--primary);
+    color: var(--on-primary);
+    font-weight: 700;
+    font-size: 11px;
+  }
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  padding-bottom: 14px;
+  gap: 18px;
+  border-bottom: 1px solid var(--border);
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__value {
+    font-weight: 800;
+    font-size: 22px;
+    line-height: 1.1;
+    font-family: var(--font-display);
+  }
+
+  button {
+    margin-left: auto;
   }
 }

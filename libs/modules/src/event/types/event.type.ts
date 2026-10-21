@@ -52,6 +52,6 @@ export type UpdateEventRequest = {
 
 export type UpdateEventResponse = string;
 
-export type SetEventStatusRequest = EventStatus;
+export type SetEventStatusRequest = { status: EventStatus };
 
 export type SetEventStatusResponse = string;

@@ -11,95 +11,160 @@
     <div class="state">Мероприятие не найдено</div>
   } @else {
     <header class="header">
-      @if (category(); as eventCategory) {
-        <div class="header__cat">{{ eventCategory.name }}</div>
-      }
-      <h2 class="header__title">{{ item.title }}</h2>
-      <span class="header__status">{{ EVENT_STATUS_LABELS[item.status] }}</span>
-    </header>
-
-    <section class="section">
-      <div class="section__main">
-        <h4 class="section__label">Описание</h4>
-        @if (item.description) {
-          <p class="section__description">{{ item.description }}</p>
-        } @else {
-          <p class="section__empty">Описание не указано</p>
+      <div class="header__main">
+        @if (category(); as eventCategory) {
+          <div class="header__cat">{{ eventCategory.name }}</div>
         }
+        <h2 class="header__title">{{ item.title }}</h2>
+        <div class="header__badges">
+          <span class="header__status">{{ EVENT_STATUS_LABELS[item.status] }}</span>
+          @if (isOrganizer()) {
+            <span class="header__role">Вы организатор</span>
+          } @else if (canManage()) {
+            <span class="header__role">Вы администратор</span>
+          }
+        </div>
       </div>
 
-      <aside class="section__info">
-        <div class="registration">
-          @if (myRegistration(); as registration) {
-            <div class="registration__status">
-              <tui-icon icon="@tui.circle-check" />
-              {{ REGISTRATION_STATUS_LABELS[registration.status] }}
-            </div>
-          } @else if (registrationClosedReason(); as reason) {
-            <div class="registration__closed">{{ reason }}</div>
+      @if (canManage()) {
+        <a
+          appearance="outline"
+          class="header__edit"
+          iconStart="@tui.pencil"
+          size="s"
+          tuiButton
+          [routerLink]="EDIT_ROUTE"
+        >
+          Редактировать
+        </a>
+      }
+    </header>
+
+    @if (canManage()) {
+      <tui-tabs class="tabs" [(activeItemIndex)]="activeTab">
+        <button tuiTab type="button">Информация</button>
+        <button tuiTab type="button">
+          Заявки
+          @if (pendingCount()) {
+            <span class="tabs__counter">{{ pendingCount() }}</span>
+          }
+        </button>
+      </tui-tabs>
+    }
+
+    @if (canManage() && activeTab() === 1) {
+      <app-event-registrations [eventId]="item.id" />
+    } @else {
+      <section class="section">
+        <div class="section__main">
+          <h4 class="section__label">Описание</h4>
+          @if (item.description) {
+            <p class="section__description">{{ item.description }}</p>
           } @else {
-            <button
-              class="registration__button"
-              size="m"
-              tuiButton
-              type="button"
-              [loading]="isRegistering()"
-              (click)="register()"
-            >
-              Записаться
-            </button>
+            <p class="section__empty">Описание не указано</p>
           }
         </div>
 
-        @if (canManageStatus()) {
-          <div class="status">
-            <span class="section__label">Статус мероприятия</span>
-            <div class="status__options">
-              @for (status of EVENT_STATUS; track status) {
+        <aside class="section__info">
+          @if (canManage()) {
+            <div class="summary">
+              <div class="summary__item">
+                <span class="summary__value">{{ pendingCount() }}</span>
+                <span class="section__label">ожидают</span>
+              </div>
+              <div class="summary__item">
+                <span class="summary__value">{{ confirmedCount() }}</span>
+                <span class="section__label">приняты</span>
+              </div>
+              <button
+                appearance="flat"
+                size="xs"
+                tuiButton
+                type="button"
+                (click)="activeTab.set(1)"
+              >
+                К заявкам
+              </button>
+            </div>
+
+            <div class="status">
+              <span class="section__label">Статус мероприятия</span>
+              <div class="status__options">
+                @for (status of EVENT_STATUS; track status) {
+                  <button
+                    size="xs"
+                    tuiButton
+                    type="button"
+                    [appearance]="status === item.status ? 'primary' : 'outline'"
+                    [disabled]="isStatusChanging()"
+                    (click)="changeStatus(status)"
+                  >
+                    {{ EVENT_STATUS_LABELS[status] }}
+                  </button>
+                }
+              </div>
+            </div>
+          } @else {
+            <div class="registration">
+              @if (myRegistration(); as registration) {
+                <div
+                  class="registration__status"
+                  [class]="'registration__status_' + registration.status.toLowerCase()"
+                >
+                  <tui-icon
+                    [icon]="
+                      registration.status === 'Cancelled' ? '@tui.circle-x' : '@tui.circle-check'
+                    "
+                  />
+                  {{ REGISTRATION_STATUS_LABELS[registration.status] }}
+                </div>
+              } @else if (registrationClosedReason(); as reason) {
+                <div class="registration__closed">{{ reason }}</div>
+              } @else {
                 <button
-                  size="xs"
+                  class="registration__button"
+                  size="m"
                   tuiButton
                   type="button"
-                  [appearance]="status === item.status ? 'primary' : 'outline'"
-                  [disabled]="isStatusChanging()"
-                  (click)="changeStatus(status)"
+                  [loading]="isRegistering()"
+                  (click)="register()"
                 >
-                  {{ EVENT_STATUS_LABELS[status] }}
+                  Записаться
                 </button>
               }
             </div>
-          </div>
-        }
-
-        <div class="section__info-row">
-          <span class="section__label">Начало</span>
-          <span>{{ item.startDate | date: 'd MMMM y, HH:mm' }}</span>
-        </div>
-        @if (item.endDate) {
-          <div class="section__info-row">
-            <span class="section__label">Окончание</span>
-            <span>{{ item.endDate | date: 'd MMMM y, HH:mm' }}</span>
-          </div>
-        }
-        @if (item.registrationDeadline) {
-          <div class="section__info-row">
-            <span class="section__label">Регистрация до</span>
-            <span>{{ item.registrationDeadline | date: 'd MMMM y' }}</span>
-          </div>
-        }
-        <div class="section__info-row">
-          <span class="section__label">Площадка</span>
-          <span>{{ item.venueId || 'Не указана' }}</span>
-        </div>
-        <div class="section__info-row">
-          <span class="section__label">Участники</span>
-          @if (item.maxParticipants) {
-            <span>{{ participantsCount() }} из {{ item.maxParticipants }}</span>
-          } @else {
-            <span>{{ participantsCount() }}, без ограничений</span>
           }
-        </div>
-      </aside>
-    </section>
+
+          <div class="section__info-row">
+            <span class="section__label">Начало</span>
+            <span>{{ item.startDate | date: 'd MMMM y, HH:mm' }}</span>
+          </div>
+          @if (item.endDate) {
+            <div class="section__info-row">
+              <span class="section__label">Окончание</span>
+              <span>{{ item.endDate | date: 'd MMMM y, HH:mm' }}</span>
+            </div>
+          }
+          @if (item.registrationDeadline) {
+            <div class="section__info-row">
+              <span class="section__label">Регистрация до</span>
+              <span>{{ item.registrationDeadline | date: 'd MMMM y' }}</span>
+            </div>
+          }
+          <div class="section__info-row">
+            <span class="section__label">Площадка</span>
+            <span>{{ item.venueId || 'Не указана' }}</span>
+          </div>
+          <div class="section__info-row">
+            <span class="section__label">Участники</span>
+            @if (item.maxParticipants) {
+              <span>{{ confirmedCount() }} из {{ item.maxParticipants }}</span>
+            } @else {
+              <span>{{ confirmedCount() }}, без ограничений</span>
+            }
+          </div>
+        </aside>
+      </section>
+    }
   }
 </div>

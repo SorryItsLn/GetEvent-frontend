@@ -1,0 +1,56 @@
+<div class="event-registrations">
+  @for (registration of registrations(); track registration.id) {
+    @let decision = pendingDecision();
+    @let isBusy = decision?.id === registration.id;
+
+    <div class="row">
+      <div class="row__avatar">{{ getInitial(registration) }}</div>
+
+      <div class="row__info">
+        <span class="row__name">{{ registration.userName || 'Участник' }}</span>
+        <span class="row__meta">
+          @if (registration.userEmail) {
+            {{ registration.userEmail }} ·
+          }
+          заявка {{ registration.registeredAt | date: 'd MMM, HH:mm' }}
+        </span>
+      </div>
+
+      <span class="row__status" [class]="'row__status_' + registration.status.toLowerCase()">
+        {{ REGISTRATION_STATUS_MANAGE_LABELS[registration.status] }}
+      </span>
+
+      <div class="row__actions">
+        @if (registration.status !== 'Confirmed') {
+          <button
+            iconStart="@tui.check"
+            size="s"
+            tuiButton
+            type="button"
+            [disabled]="!!decision && !isBusy"
+            [loading]="isBusy && decision?.status === 'Confirmed'"
+            (click)="decide(registration, 'Confirmed')"
+          >
+            Принять
+          </button>
+        }
+        @if (registration.status !== 'Cancelled') {
+          <button
+            appearance="outline"
+            iconStart="@tui.x"
+            size="s"
+            tuiButton
+            type="button"
+            [disabled]="!!decision && !isBusy"
+            [loading]="isBusy && decision?.status === 'Cancelled'"
+            (click)="decide(registration, 'Cancelled')"
+          >
+            Отклонить
+          </button>
+        }
+      </div>
+    </div>
+  } @empty {
+    <div class="empty">Заявок пока нет</div>
+  }
+</div>

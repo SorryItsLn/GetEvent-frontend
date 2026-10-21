@@ -9,7 +9,11 @@ export const eventRoutes: Routes = [
   },
   {
     path: EVENT_ROUTING_LINKS.CREATION,
-    loadComponent: async () => (await import('./event-creation')).EventCreationComponent,
+    loadComponent: async () => (await import('./event-form')).EventFormComponent,
+  },
+  {
+    path: EVENT_ROUTING_LINKS.EDIT,
+    loadComponent: async () => (await import('./event-form')).EventFormComponent,
   },
   {
     path: EVENT_ROUTING_LINKS.DETAILS,

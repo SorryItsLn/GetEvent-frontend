@@ -1,0 +1,110 @@
+<div class="event-form">
+  <header class="header">
+    @if (isEditMode) {
+      <div class="header__title">Редактирование мероприятия</div>
+      <div class="header__subtitle">Изменения увидят все, кто открывает мероприятие</div>
+    } @else {
+      <div class="header__title">Новое мероприятие</div>
+      <div class="header__subtitle">
+        Заполните основные детали — остальное можно поправить позже
+      </div>
+    }
+  </header>
+
+  @if (isLoading()) {
+    <div class="state">Загрузка…</div>
+  } @else if (isEditMode && editedEvent() === null) {
+    <div class="state">Мероприятие не найдено</div>
+  } @else if (accessDenied()) {
+    <div class="state">Редактировать мероприятие может только организатор или администратор</div>
+  } @else {
+    <section class="section__form">
+      <form class="section__form-body" [formGroup]="eventForm" (ngSubmit)="submit()">
+        <div>
+          <h4 class="section__field-label">Название</h4>
+          <tui-textfield>
+            <label for="title" tuiLabel>Например: вечер настольных игр</label>
+            <input formControlName="title" id="title" tuiInput />
+          </tui-textfield>
+        </div>
+
+        <div>
+          <h4 class="section__field-label">Описание</h4>
+          <tui-textfield>
+            <label for="description" tuiLabel>Расскажите, что участников ждет на мероприятии</label>
+            <textarea formControlName="description" id="description" tuiTextarea></textarea>
+          </tui-textfield>
+        </div>
+
+        <div class="section__field-row">
+          <div class="section__field-item">
+            <h4 class="section__field-label">Дата начала мероприятия</h4>
+            <tui-textfield>
+              <input formControlName="startDate" id="startDate" tuiInputDate />
+              <tui-calendar *tuiDropdown />
+            </tui-textfield>
+            @if (isEditMode) {
+              <p class="section__field-hint">Дату начала пока нельзя изменить</p>
+            }
+          </div>
+
+          <div class="section__field-item">
+            <h4 class="section__field-label">Дата окончания мероприятия</h4>
+            <tui-textfield>
+              <input formControlName="endDate" id="endDate" tuiInputDate />
+              <tui-calendar *tuiDropdown />
+            </tui-textfield>
+          </div>
+
+          <div class="section__field-item">
+            <h4 class="section__field-label">Дедлайн регистрации</h4>
+            <tui-textfield>
+              <input
+                formControlName="registrationDeadline"
+                id="registrationDeadline"
+                tuiInputDate
+              />
+              <tui-calendar *tuiDropdown />
+            </tui-textfield>
+          </div>
+        </div>
+
+        <div class="section__field-row">
+          <div class="section__field-item">
+            <h4 class="section__field-label">Категория</h4>
+            <tui-textfield tuiChevron [stringify]="stringifyCategory">
+              <input formControlName="category" id="category" tuiSelect />
+              <tui-data-list-wrapper *tuiDropdown [items]="eventCategories()" />
+            </tui-textfield>
+          </div>
+
+          <div class="section__field-item">
+            <h4 class="section__field-label">Максимум участников</h4>
+            <tui-textfield>
+              <input
+                formControlName="maxParticipants"
+                id="maxParticipants"
+                tuiInput
+                type="number"
+              />
+            </tui-textfield>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="section__field-label">Площадка</h4>
+          <app-input-venue formControlName="venue" />
+        </div>
+
+        <div class="section__separator"></div>
+
+        <div class="section__form-footer">
+          <button size="m" tuiButton type="submit" [loading]="isSaving()">
+            {{ isEditMode ? 'Сохранить' : 'Создать мероприятие' }}
+          </button>
+          <a appearance="outline" size="m" tuiButton [routerLink]="cancelRoute">Отмена</a>
+        </div>
+      </form>
+    </section>
+  }
+</div>

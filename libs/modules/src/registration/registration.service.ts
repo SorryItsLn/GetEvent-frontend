@@ -1,14 +1,16 @@
 import { Service, inject } from '@angular/core';
 import { ApiGateway, updateStoreEntities, updateStoreEntity } from '@myorg/core';
-import { signalStore, type } from '@ngrx/signals';
-import { entityConfig, withEntities } from '@ngrx/signals/entities';
-import { Observable } from 'rxjs';
+import { patchState, signalStore, type } from '@ngrx/signals';
+import { entityConfig, updateEntity, withEntities } from '@ngrx/signals/entities';
+import { Observable, tap } from 'rxjs';
 
 import {
   CountActiveRegistrationsResponse,
   CreateRegistrationRequest,
   CreateRegistrationResponse,
   Registration,
+  SetRegistrationStatusRequest,
+  SetRegistrationStatusResponse,
 } from './types';
 
 export const registrationEntityConfig = entityConfig({
@@ -47,6 +49,22 @@ export class RegistrationApiService extends signalStore(
     return this.#apiGateway.get<CountActiveRegistrationsResponse>(
       `${this.#baseUrl}/CountActive/${eventId}`,
     );
+  }
+
+  setStatus(
+    id: Registration['id'],
+    request: SetRegistrationStatusRequest,
+  ): Observable<SetRegistrationStatusResponse> {
+    return this.#apiGateway
+      .put<SetRegistrationStatusResponse>(`${this.#baseUrl}/SetStatus/${id}`, { ...request })
+      .pipe(
+        tap(() =>
+          patchState(
+            this,
+            updateEntity({ id, changes: { status: request.status } }, registrationEntityConfig),
+          ),
+        ),
+      );
   }
 
   create(request: CreateRegistrationRequest): Observable<CreateRegistrationResponse> {

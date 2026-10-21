@@ -12,6 +12,8 @@ import {
   GetPaginatedEventsResponse,
   SetEventStatusRequest,
   SetEventStatusResponse,
+  UpdateEventRequest,
+  UpdateEventResponse,
 } from './types';
 
 type EventState = { events: Event[] };
@@ -34,9 +36,15 @@ export class EventApiService extends signalStore(
     });
   }
 
-  setStatus(id: Event['id'], status: SetEventStatusRequest): Observable<SetEventStatusResponse> {
+  setStatus(id: Event['id'], request: SetEventStatusRequest): Observable<SetEventStatusResponse> {
     return this.#apiGateway.put<SetEventStatusResponse>(`${this.#baseUrl}/SetStatus/${id}`, {
-      status,
+      ...request,
+    });
+  }
+
+  update(id: Event['id'], request: UpdateEventRequest): Observable<UpdateEventResponse> {
+    return this.#apiGateway.put<UpdateEventResponse>(`${this.#baseUrl}/Update/${id}`, {
+      ...request,
     });
   }
 

@@ -87,14 +87,12 @@ export class RegistrationListComponent {
   }
 
   #attachEvents(registrations: Registration[]): Observable<RegistrationWithEvent[]> {
-    const active = registrations.filter(({ status }) => status !== 'Cancelled');
-
-    if (!active.length) {
+    if (!registrations.length) {
       return of([]);
     }
 
     return forkJoin(
-      active.map((registration) =>
+      registrations.map((registration) =>
         this.#eventService.getById(registration.eventId).pipe(
           map((event) => (event ? { registration, event } : null)),
           catchError(() => of(null)),

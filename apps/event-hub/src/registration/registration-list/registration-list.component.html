@@ -27,10 +27,7 @@
               [category]="eventCategoriesEntityMap()[item.event.categoryId]"
               [event]="item.event"
             >
-              <span
-                class="status"
-                [class.status_waitlisted]="item.registration.status === 'Waitlisted'"
-              >
+              <span class="status" [class]="'status_' + item.registration.status.toLowerCase()">
                 {{ REGISTRATION_STATUS_LABELS[item.registration.status] }}
               </span>
             </app-event-card>

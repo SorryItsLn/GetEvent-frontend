@@ -22,14 +22,29 @@ import {
   getApiErrorMessage,
 } from '@myorg/modules';
 import { TuiButton, TuiIcon, TuiNotificationService } from '@taiga-ui/core';
-import { TuiButtonLoading } from '@taiga-ui/kit';
+import { TuiButtonLoading, TuiTabs } from '@taiga-ui/kit';
 import { finalize, map, shareReplay, switchMap, take } from 'rxjs';
 
-import { EVENT_ROUTING_PARAMS, EVENT_STATUS_LABELS, REGISTRATION_STATUS_LABELS } from '../consts';
+import {
+  EVENT_ROUTING_PARAMS,
+  EVENT_ROUTING_SEGMENTS,
+  EVENT_STATUS_LABELS,
+  REGISTRATION_STATUS_LABELS,
+} from '../consts';
+import { EventRegistrationsComponent } from '../event-registrations';
+import { canManageEvent } from '../utils';
 
 @Component({
   selector: 'app-event-details',
-  imports: [TuiButton, TuiButtonLoading, TuiIcon, DatePipe, RouterLink],
+  imports: [
+    TuiButton,
+    TuiButtonLoading,
+    TuiIcon,
+    TuiTabs,
+    DatePipe,
+    RouterLink,
+    EventRegistrationsComponent,
+  ],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,9 +67,17 @@ export class EventDetailsComponent {
     this.#eventId$.pipe(switchMap((id) => this.#eventService.getById(id))),
   );
 
+  readonly #registrations = computed(() => {
+    const eventId = this.event()?.id;
+    return this.#registrationService
+      .registrationsEntities()
+      .filter((registration) => registration.eventId === eventId);
+  });
+
   protected readonly EVENT_STATUS = EVENT_STATUS;
   protected readonly EVENT_STATUS_LABELS = EVENT_STATUS_LABELS;
   protected readonly REGISTRATION_STATUS_LABELS = REGISTRATION_STATUS_LABELS;
+  protected readonly EDIT_ROUTE = EVENT_ROUTING_SEGMENTS.EDIT;
 
   protected readonly event = linkedSignal(() => this.#loadedEvent());
 
@@ -63,33 +86,30 @@ export class EventDetailsComponent {
     return event ? this.#eventCategoryService.eventCategoriesEntityMap()[event.categoryId] : null;
   });
 
+  protected readonly activeTab = signal(0);
   protected readonly isRegistering = signal(false);
   protected readonly isStatusChanging = signal(false);
 
-  protected readonly canManageStatus = computed(() => {
+  protected readonly canManage = computed(() => {
     const event = this.event();
-    const user = this.#userService.userMe();
-
-    if (!event || !user) {
-      return false;
-    }
-
-    return user.roles.includes('Admin') || event.organizerId === user.id;
+    return !!event && canManageEvent(event, this.#userService.userMe());
   });
 
-  readonly #activeRegistrations = computed(() => {
-    const eventId = this.event()?.id;
-    return this.#registrationService
-      .registrationsEntities()
-      .filter((registration) => registration.eventId === eventId)
-      .filter((registration) => registration.status !== 'Cancelled');
-  });
+  protected readonly isOrganizer = computed(
+    () => this.event()?.organizerId === this.#userService.userMe()?.id,
+  );
 
-  protected readonly participantsCount = computed(() => this.#activeRegistrations().length);
+  protected readonly confirmedCount = computed(
+    () => this.#registrations().filter(({ status }) => status === 'Confirmed').length,
+  );
+
+  protected readonly pendingCount = computed(
+    () => this.#registrations().filter(({ status }) => status === 'Waitlisted').length,
+  );
 
   protected readonly myRegistration = computed(() => {
     const userId = this.#userService.userMe()?.id;
-    return this.#activeRegistrations().find((registration) => registration.userId === userId);
+    return this.#registrations().find((registration) => registration.userId === userId);
   });
 
   protected readonly registrationClosedReason = computed(() => {
@@ -123,7 +143,7 @@ export class EventDetailsComponent {
     this.isStatusChanging.set(true);
 
     this.#eventService
-      .setStatus(event.id, status)
+      .setStatus(event.id, { status })
       .pipe(
         take(1),
         finalize(() => this.isStatusChanging.set(false)),
@@ -148,16 +168,15 @@ export class EventDetailsComponent {
 
   protected register(): void {
     const eventId = this.event()?.id;
-    const userId = this.#userService.userMe()?.id;
 
-    if (!eventId || !userId || this.isRegistering()) {
+    if (!eventId || this.isRegistering()) {
       return;
     }
 
     this.isRegistering.set(true);
 
     this.#registrationService
-      .create({ eventId, userId })
+      .create({ eventId })
       .pipe(
         switchMap(() => this.#registrationService.getByEventId(eventId)),
         take(1),
@@ -167,7 +186,7 @@ export class EventDetailsComponent {
       .subscribe({
         next: () => {
           this.#notificationService
-            .open('Вы записались на мероприятие', { appearance: 'positive' })
+            .open('Заявка отправлена организатору', { appearance: 'positive' })
             .subscribe();
         },
         error: (error: unknown) => {

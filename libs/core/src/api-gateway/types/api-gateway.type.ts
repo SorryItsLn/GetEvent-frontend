@@ -15,7 +15,7 @@ export type FormDataParamsInputObject = {
 
 export type FormDataValue = undefined | null | boolean | number | string | File | FormDataValue[];
 
-export type RequestBody = JSONParams | HttpParams | FormData | string;
+export type RequestBody = JSONParams | HttpParams | FormData;
 
 export type RequestHeaders = HttpHeaders | Record<string, string | string[]>;
 

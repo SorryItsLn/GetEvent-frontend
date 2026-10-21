@@ -15,7 +15,17 @@
   }
 }
 
+.state {
+  color: var(--text-muted);
+}
+
 .section {
+  &__field-hint {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 12.5px;
+  }
+
   &__form {
     max-width: 640px;
     padding: 28px;

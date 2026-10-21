@@ -69,6 +69,7 @@ event/
   consts/              event-routing.const.ts + index.ts
   event-list/          event-list.component.{ts,html,scss} + index.ts
   event-details/
+  utils/               чистые функции фичи (canManageEvent) + index.ts
   event.routes.ts      export const eventRoutes: Routes
   index.ts             export * from './consts'; export * from './event.routes';
 ```
