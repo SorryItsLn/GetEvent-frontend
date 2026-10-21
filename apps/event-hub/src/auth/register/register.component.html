@@ -1,23 +1,59 @@
-<form
-  appearance="floating"
-  class="register__form"
-  tuiCardLarge
-  tuiForm="m"
-  [formRoot]="registerForm"
->
-  <tui-textfield>
-    <input placeholder="Email" tuiInput type="email" [formField]="registerForm.email" />
-  </tui-textfield>
+<section class="auth-form">
+  <header class="auth-form__header">
+    <h2 class="auth-form__title">Создайте аккаунт</h2>
+    <p class="auth-form__subtitle">
+      Это займёт меньше минуты — и можно записываться на первые встречи
+    </p>
+  </header>
 
-  <tui-textfield>
-    <input placeholder="Пароль" tuiInput type="password" [formField]="registerForm.password" />
-  </tui-textfield>
+  <form class="auth-form__body" [formRoot]="registerForm">
+    <tui-textfield iconStart="@tui.user">
+      <label for="register-username" tuiLabel>Имя пользователя</label>
+      <input
+        autocomplete="username"
+        id="register-username"
+        tuiInput
+        [formField]="registerForm.userName"
+      />
+    </tui-textfield>
 
-  <tui-textfield>
-    <input placeholder="Имя пользователя" tuiInput [formField]="registerForm.userName" />
-  </tui-textfield>
+    <tui-textfield iconStart="@tui.mail">
+      <label for="register-email" tuiLabel>Email</label>
+      <input
+        autocomplete="email"
+        id="register-email"
+        tuiInput
+        type="email"
+        [formField]="registerForm.email"
+      />
+    </tui-textfield>
 
-  <button class="register__button" tuiButton type="submit">Зарегистрироваться</button>
+    <tui-textfield iconStart="@tui.lock">
+      <label for="register-password" tuiLabel>Пароль</label>
+      <input
+        autocomplete="new-password"
+        id="register-password"
+        tuiInput
+        type="password"
+        [formField]="registerForm.password"
+      />
+      <tui-icon tuiPassword />
+    </tui-textfield>
 
-  <a tuiLink [routerLink]="LOGIN_ROUTE">Войти</a>
-</form>
+    @if (errorMessage(); as message) {
+      <p class="auth-form__error" role="alert">
+        <tui-icon icon="@tui.circle-alert" />
+        {{ message }}
+      </p>
+    }
+
+    <button class="auth-form__submit" size="l" tuiButton type="submit" [loading]="isSubmitting()">
+      Зарегистрироваться
+    </button>
+  </form>
+
+  <p class="auth-form__switch">
+    Уже есть аккаунт?
+    <a tuiLink [routerLink]="LOGIN_ROUTE">Войти</a>
+  </p>
+</section>

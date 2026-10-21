@@ -1,13 +1,47 @@
-<form appearance="floating" class="login__form" tuiCardLarge tuiForm="m" [formRoot]="loginForm">
-  <tui-textfield>
-    <input placeholder="Email" tuiInput type="email" [formField]="loginForm.email" />
-  </tui-textfield>
+<section class="auth-form">
+  <header class="auth-form__header">
+    <h2 class="auth-form__title">С возвращением!</h2>
+    <p class="auth-form__subtitle">Войдите, чтобы записываться на мероприятия и управлять своими</p>
+  </header>
 
-  <tui-textfield>
-    <input placeholder="Пароль" tuiInput type="password" [formField]="loginForm.password" />
-  </tui-textfield>
+  <form class="auth-form__body" [formRoot]="loginForm">
+    <tui-textfield iconStart="@tui.mail">
+      <label for="login-email" tuiLabel>Email</label>
+      <input
+        autocomplete="email"
+        id="login-email"
+        tuiInput
+        type="email"
+        [formField]="loginForm.email"
+      />
+    </tui-textfield>
 
-  <button class="login__button" tuiButton type="submit">Войти</button>
+    <tui-textfield iconStart="@tui.lock">
+      <label for="login-password" tuiLabel>Пароль</label>
+      <input
+        autocomplete="current-password"
+        id="login-password"
+        tuiInput
+        type="password"
+        [formField]="loginForm.password"
+      />
+      <tui-icon tuiPassword />
+    </tui-textfield>
 
-  <a tuiLink [routerLink]="REGISTER_ROUTE">Зарегистрироваться</a>
-</form>
+    @if (errorMessage(); as message) {
+      <p class="auth-form__error" role="alert">
+        <tui-icon icon="@tui.circle-alert" />
+        {{ message }}
+      </p>
+    }
+
+    <button class="auth-form__submit" size="l" tuiButton type="submit" [loading]="isSubmitting()">
+      Войти
+    </button>
+  </form>
+
+  <p class="auth-form__switch">
+    Нет аккаунта?
+    <a tuiLink [routerLink]="REGISTER_ROUTE">Зарегистрироваться</a>
+  </p>
+</section>

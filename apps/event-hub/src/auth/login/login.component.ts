@@ -1,16 +1,29 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormField, FormRoot, email, form, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService, LoginRequest } from '@myorg/modules';
-import { TuiButton, TuiInput, TuiLink } from '@taiga-ui/core';
-import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
+import { AuthService, LoginRequest, getApiErrorMessage } from '@myorg/modules';
+import { TuiButton, TuiIcon, TuiInput, TuiLabel, TuiLink, TuiTextfield } from '@taiga-ui/core';
+import { TuiButtonLoading, TuiPassword } from '@taiga-ui/kit';
+import { finalize } from 'rxjs';
 
 import { HOME_ROUTING_BASE } from '../../home/consts';
 import { AUTH_ROUTING_LINKS } from '../consts';
 
 @Component({
   selector: 'app-login',
-  imports: [TuiInput, FormField, FormRoot, TuiCardLarge, TuiForm, TuiButton, TuiLink, RouterLink],
+  imports: [
+    FormField,
+    FormRoot,
+    RouterLink,
+    TuiButton,
+    TuiButtonLoading,
+    TuiIcon,
+    TuiInput,
+    TuiLabel,
+    TuiLink,
+    TuiPassword,
+    TuiTextfield,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +35,9 @@ export class LoginComponent {
   readonly #loginModel = signal<LoginRequest>({ email: '', password: '' });
 
   protected readonly REGISTER_ROUTE = `/${AUTH_ROUTING_LINKS.SIGN_UP}`;
+
+  protected readonly isSubmitting = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly loginForm = form(
     this.#loginModel,
@@ -40,8 +56,23 @@ export class LoginComponent {
   );
 
   #login(request: LoginRequest): void {
-    this.#authService.login(request).subscribe(() => {
-      this.#router.navigateByUrl(`/${HOME_ROUTING_BASE}`);
-    });
+    if (this.isSubmitting()) {
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
+
+    this.#authService
+      .login(request)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: () => {
+          this.#router.navigateByUrl(`/${HOME_ROUTING_BASE}`);
+        },
+        error: (error: unknown) => {
+          this.errorMessage.set(getApiErrorMessage(error, 'Неверный email или пароль'));
+        },
+      });
   }
 }

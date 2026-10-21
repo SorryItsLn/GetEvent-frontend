@@ -1,13 +1,9 @@
-.login {
-  &__form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: min(360px, calc(100vw - 32px));
-    gap: 10px;
-  }
+@use '../styles/auth-form';
 
-  &__button {
-    width: 100%;
-  }
+:host {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
+
+@include auth-form.styles;

@@ -5,10 +5,11 @@ import { TuiButton, TuiIcon } from '@taiga-ui/core';
 
 import { AUTH_ROUTING_LINKS } from '../../auth/consts';
 import { HOME_ROUTE } from '../consts';
+import { LogoComponent } from '../logo';
 
 @Component({
   selector: 'app-header',
-  imports: [TuiIcon, TuiButton, RouterLink],
+  imports: [TuiIcon, TuiButton, RouterLink, LogoComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

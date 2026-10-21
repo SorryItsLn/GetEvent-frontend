@@ -16,6 +16,14 @@
   border-right: 1px solid var(--border);
   background-color: var(--surface);
 
+  &__logo-mark {
+    --logo-size: 26px;
+  }
+
+  &__label-accent {
+    color: var(--primary-text);
+  }
+
   &__label-text {
     color: var(--text);
     font-weight: 800;

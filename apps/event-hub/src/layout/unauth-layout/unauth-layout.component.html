@@ -1,3 +1,46 @@
 <div class="unauth-layout">
-  <router-outlet />
+  <aside class="promo">
+    <app-logo class="promo__logo" />
+
+    <div class="promo__content">
+      <h1 class="promo__title">
+        Портал мероприятий
+        <span class="promo__accent">для своих людей</span>
+      </h1>
+      <p class="promo__text">
+        Event HUB — место, где находят встречи по интересам, записываются на них и организуют
+        собственные события.
+      </p>
+
+      <ul class="promo__features">
+        @for (feature of AUTH_FEATURES; track feature.text) {
+          <li class="promo__feature">
+            <span class="promo__feature-icon">
+              <tui-icon [icon]="feature.icon" />
+            </span>
+            {{ feature.text }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div aria-hidden="true" class="preview">
+      @for (event of AUTH_PREVIEW_EVENTS; track event.title) {
+        <div class="preview__card" [class]="'preview__card_' + event.tint">
+          <div class="preview__date">
+            <span class="preview__month">{{ event.month }}</span>
+            <span class="preview__day">{{ event.day }}</span>
+          </div>
+          <div class="preview__body">
+            <span class="preview__cat">{{ event.category }}</span>
+            <span class="preview__title">{{ event.title }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </aside>
+
+  <main class="unauth-layout__content">
+    <router-outlet />
+  </main>
 </div>

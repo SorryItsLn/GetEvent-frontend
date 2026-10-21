@@ -1,7 +1,262 @@
+@use 'breakpoints' as bp;
+
 .unauth-layout {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100vh;
   background-color: var(--bg);
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+  }
+
+  @include bp.below-desktop {
+    grid-template-rows: auto 1fr;
+    grid-template-columns: minmax(0, 1fr);
+
+    &__content {
+      align-items: flex-start;
+      padding: 24px 16px 40px;
+    }
+  }
+
+  @include bp.mobile {
+    &__content {
+      padding: 16px 16px 24px;
+    }
+  }
+}
+
+.promo {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding: 40px 48px;
+  overflow: hidden;
+  gap: 40px;
+  background: var(--primary-light);
+
+  &::before,
+  &::after {
+    position: absolute;
+    border-radius: 50%;
+    content: '';
+    pointer-events: none;
+  }
+
+  &::before {
+    top: -120px;
+    right: -120px;
+    width: 320px;
+    height: 320px;
+    background: var(--tint-amber-bg);
+    opacity: 0.7;
+  }
+
+  &::after {
+    bottom: -160px;
+    left: -100px;
+    width: 360px;
+    height: 360px;
+    background: var(--tint-sage-bg);
+    opacity: 0.7;
+  }
+
+  > * {
+    z-index: 1;
+    position: relative;
+  }
+
+  &__logo {
+    --logo-size: 36px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    gap: 16px;
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--text);
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1.12;
+  }
+
+  &__accent {
+    display: block;
+    color: var(--primary-text);
+  }
+
+  &__text {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  &__features {
+    display: flex;
+    flex-direction: column;
+    margin: 8px 0 0;
+    padding: 0;
+    gap: 12px;
+    list-style: none;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+    font-weight: 500;
+    font-size: 15px;
+  }
+
+  &__feature-icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--primary-text);
+    font-size: 18px;
+  }
+
+  @include bp.below-desktop {
+    padding: 24px 24px 28px;
+    gap: 20px;
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__features {
+      display: none;
+    }
+  }
+
+  @include bp.mobile {
+    align-items: center;
+    padding: 24px 16px 0;
+    background: none;
+
+    &__logo {
+      --logo-size: 30px;
+    }
+
+    &__content,
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin-top: auto;
+  gap: 12px;
+
+  &__card {
+    --card-bg: var(--tint-sage-bg);
+    --card-fg: var(--tint-sage-fg);
+
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    gap: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+
+    &:nth-child(1) {
+      transform: rotate(-2deg);
+    }
+
+    &:nth-child(2) {
+      margin-left: 32px;
+      transform: rotate(1.5deg);
+    }
+
+    &:nth-child(3) {
+      margin-left: 12px;
+      transform: rotate(-1deg);
+    }
+
+    &_amber {
+      --card-bg: var(--tint-amber-bg);
+      --card-fg: var(--tint-amber-fg);
+    }
+
+    &_plum {
+      --card-bg: var(--tint-plum-bg);
+      --card-fg: var(--tint-plum-fg);
+    }
+  }
+
+  &__date {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius);
+    background: var(--card-bg);
+    color: var(--card-fg);
+    line-height: 1.1;
+  }
+
+  &__month {
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+
+  &__day {
+    font-weight: 800;
+    font-size: 20px;
+    font-family: var(--font-display);
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  &__cat {
+    color: var(--card-fg);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    overflow: hidden;
+    color: var(--text);
+    font-weight: 700;
+    font-size: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include bp.below-desktop {
+    display: none;
+  }
 }

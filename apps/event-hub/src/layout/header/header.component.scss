@@ -23,11 +23,8 @@
     text-decoration: none;
   }
 
-  &__logo-text {
-    color: var(--text);
-    font-weight: 800;
-    font-size: 17px;
-    font-family: var(--font-display);
+  &__logo-mark {
+    --logo-size: 28px;
   }
 
   @include bp.mobile {

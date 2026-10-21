@@ -5,10 +5,11 @@ import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TuiAvatar } from '@taiga-ui/kit';
 
 import { HOME_ROUTE, MAIN_NAVIGATION, USER_PROFILE_ROUTE } from '../consts';
+import { LogoComponent } from '../logo';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [TuiIcon, TuiButton, TuiAvatar, RouterLink, RouterLinkActive],
+  imports: [TuiIcon, TuiButton, TuiAvatar, RouterLink, RouterLinkActive, LogoComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

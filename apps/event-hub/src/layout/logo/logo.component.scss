@@ -1,0 +1,41 @@
+:host {
+  display: inline-flex;
+  --logo-size: 32px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  &__mark {
+    flex-shrink: 0;
+    width: var(--logo-size);
+    height: var(--logo-size);
+  }
+
+  &__bg {
+    fill: var(--primary);
+  }
+
+  &__ticket {
+    fill: var(--on-primary);
+  }
+
+  &__star {
+    fill: var(--primary);
+  }
+
+  &__text {
+    color: var(--text);
+    font-weight: 800;
+    font-size: calc(var(--logo-size) * 0.56);
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  &__accent {
+    color: var(--primary-text);
+  }
+}
