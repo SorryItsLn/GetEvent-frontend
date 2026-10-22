@@ -16,7 +16,13 @@
     { "type": "revert", "section": "Откаты" }
   ],
   "include-component-in-tag": false,
-  "packages": { ".": { "package-name": "event-hub", "changelog-path": "CHANGELOG.md" } },
+  "packages": {
+    ".": {
+      "package-name": "event-hub",
+      "initial-version": "0.1.0",
+      "changelog-path": "CHANGELOG.md"
+    }
+  },
   "pull-request-title-pattern": "chore: release ${version}",
   "release-type": "node"
 }
