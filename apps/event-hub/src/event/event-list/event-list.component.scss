@@ -30,6 +30,28 @@
   }
 }
 
+.tabs {
+  &__counter {
+    margin-left: 6px;
+    padding: 0 7px;
+    border-radius: var(--radius-lg);
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 11px;
+  }
+}
+
+.pending {
+  padding: 2px 10px;
+  border-radius: var(--radius-lg);
+  background: var(--tint-amber-bg);
+  color: var(--tint-amber-fg);
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 .state {
   color: var(--text-muted);
 }

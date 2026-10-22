@@ -9,14 +9,44 @@
     <a size="s" tuiButton [routerLink]="[EVENT_CREATION_ROUTE]">Создать</a>
   </header>
 
+  <tui-tabs
+    class="tabs"
+    [activeItemIndex]="tabIndex()"
+    (activeItemIndexChange)="changeFilter($event)"
+  >
+    <button tuiTab type="button">Все</button>
+    <button tuiTab type="button">
+      Мои
+      @if (myEventsCount(); as count) {
+        <span class="tabs__counter">{{ count }}</span>
+      }
+    </button>
+  </tui-tabs>
+
   @let page = events();
 
-  @if (!page) {
+  @if (page === undefined) {
     <div class="state">Загрузка…</div>
+  } @else if (page === null) {
+    <div class="empty">
+      <p class="empty__title">
+        {{
+          isMyFilter() ?
+            'Не удалось загрузить ваши мероприятия'
+          : 'Не удалось загрузить мероприятия'
+        }}
+      </p>
+      <p class="empty__text">Попробуйте обновить страницу чуть позже.</p>
+    </div>
   } @else if (!page.totalCount) {
     <div class="empty">
-      <p class="empty__title">Мероприятий пока нет</p>
-      <p class="empty__text">Создайте первое — участники найдут его здесь.</p>
+      @if (isMyFilter()) {
+        <p class="empty__title">Вы ещё не создали мероприятий</p>
+        <p class="empty__text">Соберите своих людей — это займёт пару минут.</p>
+      } @else {
+        <p class="empty__title">Мероприятий пока нет</p>
+        <p class="empty__text">Создайте первое — участники найдут его здесь.</p>
+      }
       <a size="m" tuiButton [routerLink]="[EVENT_CREATION_ROUTE]">Создать мероприятие</a>
     </div>
   } @else if (!page.items.length) {
@@ -31,7 +61,18 @@
 
     <section class="section" [class.section_loading]="isLoading()">
       @for (item of page.items; track item.id) {
-        <app-event-card [category]="eventCategoriesEntityMap()[item.categoryId]" [event]="item" />
+        <app-event-card
+          [category]="eventCategoriesEntityMap()[item.categoryId]"
+          [confirmedCount]="item.confirmedCount ?? null"
+          [event]="item"
+          [showStatus]="isMyFilter()"
+        >
+          @if (item.pendingCount) {
+            <span class="pending">{{
+              item.pendingCount | i18nPlural: PENDING_REGISTRATIONS_PLURAL
+            }}</span>
+          }
+        </app-event-card>
       }
     </section>
 

@@ -5,7 +5,13 @@
     @if (category(); as eventCategory) {
       <span class="event-card__cat">{{ eventCategory.name }}</span>
     }
-    <tui-icon class="event-card__decor" icon="@tui.ticket" />
+    @if (showStatus()) {
+      <span class="event-card__status" [class]="'event-card__status_' + item.status.toLowerCase()">
+        {{ EVENT_STATUS_LABELS[item.status] }}
+      </span>
+    } @else {
+      <tui-icon class="event-card__decor" icon="@tui.ticket" />
+    }
 
     <div class="event-card__date">
       <span class="event-card__month">{{ item.startDate | date: 'LLL' }}</span>
@@ -29,7 +35,15 @@
     }
 
     <div class="event-card__foot">
-      @if (item.maxParticipants) {
+      @let confirmed = confirmedCount();
+      @if (confirmed !== null) {
+        <span>
+          Принято {{ confirmed }}
+          @if (item.maxParticipants) {
+            из {{ item.maxParticipants }}
+          }
+        </span>
+      } @else if (item.maxParticipants) {
         <span>До {{ item.maxParticipants }} участников</span>
       } @else {
         <span>Без ограничений</span>
