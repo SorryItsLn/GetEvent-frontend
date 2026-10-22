@@ -64,11 +64,6 @@
     },
     { "plugin": "@nx/vitest", "options": { "testTargetName": "test" } }
   ],
-  "release": {
-    "projects": ["api"],
-    "projectsRelationship": "independent",
-    "docker": { "skipVersionActions": true }
-  },
   "targetDefaults": {
     "@angular/build:application": {
       "cache": true,

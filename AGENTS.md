@@ -116,3 +116,10 @@ event/
 - Vitest + Analog, файл `*.spec.ts` лежит рядом с исходником; `describe` называется по имени класса.
 - Компоненты с `routerLink` / `ActivatedRoute` тестируются с `providers: [provideRouter([])]`.
 - Сервисы — через `TestBed.inject(...)`, базовые директивы — через тестовый компонент-наследник.
+
+## Коммиты, PR и changelog
+
+- Заголовки коммитов и PR — Conventional Commits: `feat: ...`, `fix: ...`, `refactor: ...`, `perf: ...`, `docs: ...`, `test: ...`, `build: ...`, `ci: ...`, `chore: ...`. Описание после типа — со строчной буквы, на английском (`feat: event list pagination`). Формат заголовка PR проверяет workflow `pr-title.yml`.
+- PR мержим через squash merge: заголовок PR становится коммитом в `main` и строкой в changelog.
+- `CHANGELOG.md` и версию в `package.json` руками не правим. Их ведёт release-please (`release-please.yml`, `release-please-config.json`): после мержа в `main` он обновляет PR `chore: release x.y.z`, а мерж этого PR выпускает релиз (тег и GitHub Release).
+- В changelog попадают `feat`, `fix`, `perf`, `refactor`, `revert`. Остальные типы скрыты.
