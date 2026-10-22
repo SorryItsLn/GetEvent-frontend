@@ -70,6 +70,26 @@
     white-space: nowrap;
   }
 
+  &__status {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 11px;
+    white-space: nowrap;
+
+    &_published {
+      color: var(--success);
+    }
+
+    &_cancelled {
+      color: var(--primary-text);
+    }
+  }
+
   &__decor {
     margin-left: auto;
     color: var(--cover-fg);

@@ -8,6 +8,8 @@ import {
   CreateEventResponse,
   Event,
   GetEventByIdResponse,
+  GetMyEventsQuery,
+  GetMyEventsResponse,
   GetPaginatedEventsQuery,
   GetPaginatedEventsResponse,
   SetEventStatusRequest,
@@ -32,6 +34,12 @@ export class EventApiService extends signalStore(
 
   getPaginated(query: GetPaginatedEventsQuery): Observable<GetPaginatedEventsResponse> {
     return this.#apiGateway.get<GetPaginatedEventsResponse>(`${this.#baseUrl}/GetPaginated`, {
+      queryParams: { ...query },
+    });
+  }
+
+  getMy(query: GetMyEventsQuery): Observable<GetMyEventsResponse> {
+    return this.#apiGateway.get<GetMyEventsResponse>(`${this.#baseUrl}/GetMy`, {
       queryParams: { ...query },
     });
   }

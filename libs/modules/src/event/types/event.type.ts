@@ -27,6 +27,12 @@ export type GetPaginatedEventsQuery = {
 
 export type GetPaginatedEventsResponse = Paginated<Event>;
 
+export type MyEvent = Event & { pendingCount: number; confirmedCount: number };
+
+export type GetMyEventsQuery = { page: number; pageSize: number };
+
+export type GetMyEventsResponse = Paginated<MyEvent>;
+
 export type CreateEventRequest = {
   title: string;
   description: string;

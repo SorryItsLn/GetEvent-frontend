@@ -4,7 +4,12 @@ import { RouterLink } from '@angular/router';
 import { Event, EventCategory } from '@myorg/modules';
 import { TuiIcon } from '@taiga-ui/core';
 
-import { EVENT_CARD_TINTS, EVENT_ROUTING_BASE, EventCardTint } from '../consts';
+import {
+  EVENT_CARD_TINTS,
+  EVENT_ROUTING_BASE,
+  EVENT_STATUS_LABELS,
+  EventCardTint,
+} from '../consts';
 
 @Component({
   selector: 'app-event-card',
@@ -16,8 +21,11 @@ import { EVENT_CARD_TINTS, EVENT_ROUTING_BASE, EventCardTint } from '../consts';
 export class EventCardComponent {
   readonly event = input.required<Event>();
   readonly category = input<EventCategory>();
+  readonly showStatus = input(false);
+  readonly confirmedCount = input<number | null>(null);
 
   protected readonly EVENT_ROUTING_BASE = EVENT_ROUTING_BASE;
+  protected readonly EVENT_STATUS_LABELS = EVENT_STATUS_LABELS;
 
   protected readonly tintClass = computed(() => `event-card_${getTint(this.event().categoryId)}`);
 }

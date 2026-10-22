@@ -13,3 +13,16 @@ export const EVENT_COUNT_PLURAL: Record<string, string> = {
   many: '# мероприятий',
   other: '# мероприятия',
 };
+
+export const EVENT_LIST_FILTER_QUERY_PARAM = 'filter';
+
+export const EVENT_LIST_FILTERS = { ALL: 'all', MY: 'my' } as const;
+
+export type EventListFilter = (typeof EVENT_LIST_FILTERS)[keyof typeof EVENT_LIST_FILTERS];
+
+export const PENDING_REGISTRATIONS_PLURAL: Record<string, string> = {
+  one: '# заявка ждёт',
+  few: '# заявки ждут',
+  many: '# заявок ждут',
+  other: '# заявки ждут',
+};
